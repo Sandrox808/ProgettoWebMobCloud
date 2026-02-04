@@ -1,1 +1,1 @@
-Progetto Informatica per la Comunicazxione digitale
+Progetto Informatica per la Comunicazione digitale

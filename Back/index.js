@@ -1,17 +1,22 @@
+require('dotenv').config();
 const express = require('express');
 const { getDB } = require('./database/db');
 
+const authRoutes = require('./routes/auth');
+const queueRoutes = require('./routes/queue');
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(authRoutes);
+app.use(queueRoutes);
 
 app.listen(port, async () => {
     console.log(`Server attivo su http://localhost:${port}`);
-    
     try {
         await getDB();
     } catch (error) {
-        console.error("Errore durante l'inizializzazione del DB:", error);
+        console.error("Errore DB:", error);
     }
 });

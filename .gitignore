@@ -1,5 +1,9 @@
-node_modules
+#File
 .env
 *.sqlite
 *.db
 .DS_Store
+
+#Cartelle
+test/
+node_modules

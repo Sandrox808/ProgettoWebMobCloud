@@ -1,11 +1,17 @@
 const express = require('express');
+const { getDB } = require('./database/db');
+
 const app = express();
 const port = 3000;
 
-app.get('/', (req, res) => {
-  res.send('Backend funzionante!');
-});
+app.use(express.json());
 
-app.listen(port, () => {
-  console.log(`Server attivo sulla porta ${port}`);
+app.listen(port, async () => {
+    console.log(`Server attivo su http://localhost:${port}`);
+    
+    try {
+        await getDB();
+    } catch (error) {
+        console.error("Errore durante l'inizializzazione del DB:", error);
+    }
 });

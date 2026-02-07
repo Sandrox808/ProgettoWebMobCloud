@@ -42,6 +42,17 @@ async function getDB() {
         );
     `);
 
+    await db.exec(`
+        CREATE TABLE IF NOT EXISTS history (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER,
+            action_type TEXT,
+            note TEXT,
+            created_at INTEGER,
+            FOREIGN KEY(user_id) REFERENCES users(id)
+        );
+    `);
+
     dbInstance = db;
     console.log("Database SQLite collegato.");
     return dbInstance;

@@ -37,6 +37,7 @@ router.get('/queue', async (req, res) => {
 // 2. POST /action/done
 router.post('/action/done', async (req, res) => {
     try {
+        const { note } = req.body;
         const db = await getDB();
         const first = await db.get('SELECT user_id FROM queue ORDER BY order_num ASC LIMIT 1');
 
@@ -52,6 +53,11 @@ router.post('/action/done', async (req, res) => {
 
         await normalizeQueue(db);
 
+        await db.run(
+            'INSERT INTO history (user_id, action_type, note, created_at) VALUES (?, ?, ?, ?)',
+            [req.user.id, 'DONE', note || null, Date.now()]
+        );
+
         res.json({ message: "Turno completato!" });
     } catch (error) {
         console.error("[ERR] Done:", error);
@@ -62,6 +68,7 @@ router.post('/action/done', async (req, res) => {
 // 3. POST /action/skip - Logica anti-loop
 router.post('/action/skip', async (req, res) => {
     try {
+        const { note } = req.body;
         const db = await getDB();
         const now = Date.now();
 
@@ -90,26 +97,17 @@ router.post('/action/skip', async (req, res) => {
             }
         }
 
-        if (!target) {
-            return res.status(400).json({ error: "Nessuno è presente, la coda è invariata" });
-        }
+        if (!target) {return res.status(400).json({ error: "Nessuno è presente, la coda è invariata" });}
 
-        await db.run(
-            'UPDATE queue SET order_num = order_num + 1 WHERE order_num < ?', 
-            [target.order_num]
-        );
-
-        await db.run(
-            'UPDATE queue SET order_num = 1 WHERE id = ?', 
-            [target.id]
-        );
-
-        await db.run(
-            'UPDATE queue SET last_skipped = ? WHERE id = ?', 
-            [now, absentUser.id]
-        );
-
+        await db.run('UPDATE queue SET order_num = order_num + 1 WHERE order_num < ?', [target.order_num]);
+        await db.run('UPDATE queue SET order_num = 1 WHERE id = ?', [target.id]);
+        await db.run('UPDATE queue SET last_skipped = ? WHERE id = ?', [now, absentUser.id]);
         await normalizeQueue(db);
+
+        await db.run(
+            'INSERT INTO history (user_id, action_type, note, created_at) VALUES (?, ?, ?, ?)',
+            [absentUser.user_id, 'SKIP', note || "Salto turno", now]
+        );
 
         res.json({ message: `Assenza segnalata. ${target.user_id} passa in cima.` });
 

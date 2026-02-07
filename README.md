@@ -17,6 +17,10 @@ Autenticazione Stateless: Sistema di login basato su Token salvati su DB, elimin
 
 Sicurezza: Le password non sono salvate in chiaro ma protette tramite hashing MD5 con Salt univoco per utente e Secret globale, prevenendo attacchi hacker.
 
+Gamification: Calcolo in tempo reale delle statistiche mensili per identificare il "Campione" (più attività) e l'"Atleta" (più salti), incentivando la partecipazione.
+
+Cronologia Operazioni: Sistema di logging immutabile che registra ogni azione (DONE o SKIP) con timestamp e note opzionali, consultabile tramite filtri mensili.
+
 Logica di Coda Avanzata:
 
 - Skip Intelligente: Algoritmo di "salto turno" con cooldown temporale (30 min) per evitare loop infiniti di scambi tra utenti assenti.
@@ -40,9 +44,11 @@ Schema Relazionale: Il database è normalizzato in due tabelle principali:
 
 - queue: Stato della coda, ordine di priorità (order_num) e tracciamento dei salti recenti (last_skipped).
 
+- history: Registro storico delle azioni compiute, con riferimenti temporali e note utente.
+
 Sicurezza Query: Interazioni col database gestite esclusivamente tramite Prepared Statements per prevenire SQL Injection.
 
-Integrità: Utilizzo di Foreign Keys per collegare gli utenti alla loro posizione in coda.
+Integrità: Utilizzo di Foreign Keys per collegare gli utenti alla loro posizione in coda e allo storico.
 
 
 ### Configurazione e Setup Backend

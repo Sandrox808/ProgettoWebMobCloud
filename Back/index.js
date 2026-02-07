@@ -5,6 +5,7 @@ const { getDB } = require('./database/db');
 const authRoutes = require('./routes/auth');
 const queueRoutes = require('./routes/queue');
 const historyRoutes = require('./routes/history');
+const statsRoutes = require('./routes/stats');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use(authRoutes);
 app.use(queueRoutes);
 app.use(historyRoutes);
+app.use(statsRoutes);
 
 app.listen(port, async () => {
     console.log(`Server attivo su http://localhost:${port}`);

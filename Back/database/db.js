@@ -37,6 +37,7 @@ async function getDB() {
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER,
             order_num INTEGER,
+            last_skipped INTEGER,
             FOREIGN KEY(user_id) REFERENCES users(id)
         );
     `);

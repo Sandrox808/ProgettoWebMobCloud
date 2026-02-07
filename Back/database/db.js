@@ -28,7 +28,8 @@ async function getDB() {
             username TEXT UNIQUE NOT NULL,
             password TEXT NOT NULL,
             salt TEXT NOT NULL,
-            token TEXT
+            token TEXT,
+            is_on_vacation INTEGER DEFAULT 0
         );
     `);
 

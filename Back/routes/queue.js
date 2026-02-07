@@ -18,18 +18,18 @@ router.get('/queue', async (req, res) => {
     try {
         const db = await getDB();
         const queue = await db.all(`
-            SELECT u.username, u.id as user_id, q.order_num, q.last_skipped 
+            SELECT u.username, u.id as user_id, u.is_on_vacation, q.order_num, q.last_skipped 
             FROM queue q 
             JOIN users u ON q.user_id = u.id 
             ORDER BY q.order_num ASC
         `);
 
-        const firstUser = queue.length > 0 ? queue[0] : null;
-        const isMyTurn = firstUser && firstUser.user_id === req.user.id;
+        const activeUser = queue.find(u => u.is_on_vacation === 0);
+        
+        const isMyTurn = activeUser && activeUser.user_id === req.user.id;
 
         res.json({ queue, currentUser: req.user.username, isMyTurn });
     } catch (error) {
-        console.error("[ERR] Lettura coda:", error);
         res.status(500).json({ error: "Errore server" });
     }
 });
@@ -39,18 +39,23 @@ router.post('/action/done', async (req, res) => {
     try {
         const { note } = req.body;
         const db = await getDB();
-        const first = await db.get('SELECT user_id FROM queue ORDER BY order_num ASC LIMIT 1');
+        const firstActive = await db.get(`
+            SELECT q.user_id 
+            FROM queue q
+            JOIN users u ON q.user_id = u.id
+            WHERE u.is_on_vacation = 0 
+            ORDER BY q.order_num ASC 
+            LIMIT 1
+        `);
 
-        if (!first || first.user_id !== req.user.id) {
-            return res.status(403).json({ error: "Non tocca a te!" });
+        if (!firstActive || firstActive.user_id !== req.user.id) {
+            return res.status(403).json({ error: "Non tocca a te (o sei in vacanza)!" });
         }
 
         const last = await db.get('SELECT MAX(order_num) as maxOrder FROM queue');
         const tempHighOrder = (last.maxOrder || 0) + 1000;
-
         await db.run('UPDATE queue SET order_num = ?, last_skipped = NULL WHERE user_id = ?', 
             [tempHighOrder, req.user.id]);
-
         await normalizeQueue(db);
 
         await db.run(
@@ -73,22 +78,27 @@ router.post('/action/skip', async (req, res) => {
         const now = Date.now();
 
         const fullQueue = await db.all(`
-            SELECT id, user_id, order_num, last_skipped 
-            FROM queue 
-            ORDER BY order_num ASC
+            SELECT q.id, q.user_id, q.order_num, q.last_skipped, u.is_on_vacation
+            FROM queue q
+            JOIN users u ON q.user_id = u.id
+            ORDER BY q.order_num ASC
         `);
 
         if (fullQueue.length < 2) {
             return res.status(400).json({ error: "Nessuno con cui scambiare!" });
         }
 
-        const absentUser = fullQueue[0];
+        const firstActiveIndex = fullQueue.findIndex(u => u.is_on_vacation === 0);
+        if (firstActiveIndex === -1) return res.status(400).json({ error: "Tutti in vacanza!" });
+        
+        const absentUser = fullQueue[firstActiveIndex];
 
         const COOLDOWN_MS = 30 * 60 * 1000; // 30min
         let target = null;
 
         for (let i = 1; i < fullQueue.length; i++) {
             const candidate = fullQueue[i];
+            if (candidate.is_on_vacation === 1) continue;
             const isRecentlySkipped = candidate.last_skipped && (now - candidate.last_skipped < COOLDOWN_MS);
 
             if (!isRecentlySkipped) {

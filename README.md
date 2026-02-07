@@ -21,6 +21,8 @@ Gamification: Calcolo in tempo reale delle statistiche mensili per identificare 
 
 Cronologia Operazioni: Sistema di logging immutabile che registra ogni azione (DONE o SKIP) con timestamp e note opzionali, consultabile tramite filtri mensili.
 
+Modalità Vacanza: Sistema di gestione stato utente (`is_on_vacation`). Gli utenti in vacanza mantengono la loro posizione in classifica ma vengono "scavalcati" automaticamente dalla logica dei turni senza perdere la priorità al rientro.
+
 Logica di Coda Avanzata:
 
 - Skip Intelligente: Algoritmo di "salto turno" con cooldown temporale (30 min) per evitare loop infiniti di scambi tra utenti assenti.
@@ -71,7 +73,7 @@ ProgettoWeb
 ├───Back
 │   ├───database       # Logica di connessione e file .sqlite
 │   ├───middleware     # Controllori di accesso (Auth Guard)
-│   ├───routes         # Endpoint API (Auth, Queue Logic)
+│   ├───routes         # Endpoint API (Auth, Queue, History, Stats, User)
 │   ├───utils          # Funzioni crittografiche (Hash, Salt)
 │   ├───.env.example   # Variabili di ambiente di Default
 │   └───index.js       # Entry point del server

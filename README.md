@@ -5,7 +5,15 @@ Il progetto nasce come la trasposizione in webapp di un programma per il traccia
 
 ## Architettura   
 ### Frontend  
-[...] 
+Il frontend è sviluppato con Angular e TailwindCSS e comunica con il backend tramite API REST (proxy `/api` in sviluppo).  
+La UI è composta da una Landing page con accesso a login/registrazione; dopo il login l’utente entra nella pagina di gestione dei turni (NamePicker).
+
+Dettagli tecnici:
+- Componenti **standalone** con file separati (`.ts`, `.html`, `.css`) per ogni pagina.
+- Routing centralizzato in `app.routes.ts` con `router-outlet` in `app.html`.
+- Chiamate HTTP centralizzate in `ApiService` (auth, queue, actions, vacation).
+- Token persistito in `localStorage` e passato nell’header `Authorization`.
+- Stili UI gestiti con classi utility di Tailwind.
 
 ### Backend 
 
@@ -34,7 +42,6 @@ Limitazioni:
 - Performance: La rinumerazione automatica della coda avviene ad ogni azione, ottimizzata per gruppi medio-piccoli, con l'aumento di utenti le performance rallentano.
 
 - Blocco Preventivo: Lo skip del turno di TUTTI i partecipanti (assenza totale) non modifica la lista per evitare loop infiniti.
-
 
 ### Database   
 
@@ -67,18 +74,41 @@ Per avviare il backend:
 
     npm start
 
+### Avvio Frontend (Angular)
+
+Per installare le dipendenze:
+
+    cd Front\Front-app
+    npm install
+
+Per avviare il frontend con proxy (necessario per evitare CORS):
+
+    ng serve --proxy-config proxy.config.json
+
+
 ### Struttura Cartelle    
 ```
 ProgettoWeb
 ├───Back
 │   ├───database       # Logica di connessione e file .sqlite
 │   ├───middleware     # Controllori di accesso (Auth Guard)
-│   ├───routes         # Endpoint API (Auth, Queue, History, Stats, User)
+│   ├───routes         # Endpoint API (Auth, Queue, History, Stats, User, Participants)
 │   ├───utils          # Funzioni crittografiche (Hash, Salt)
 │   ├───.env.example   # Variabili di ambiente di Default
 │   └───index.js       # Entry point del server
 ├───Front
+│   └───Front-app
+│       ├───proxy.config.json   # Proxy Angular per evitare CORS
+│       └───src
+│           ├───app
+│           │   ├───app.routes.ts          # Routing principale
+│           │   ├───api.service.ts         # Chiamate API centralizzate
+│           │   ├───landing                # Pagina iniziale
+│           │   ├───login                  # Login + token
+│           │   ├───register               # Registrazione
+│           │   ├───partecipanti           # Lista nomi + drag & drop + salvataggio
+│           │   └───namePicker             # Turno corrente + azioni Salta/Lavato
+│           └───styles.css                 # Tailwind import
 └───Insp
     └───LineTrack // Inspirazione o Base di partenza 
 ```
-

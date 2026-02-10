@@ -6,6 +6,10 @@
 
     <h1 class="text-4xl font-extrabold mb-6">{{ currentName || 'Nessuno' }}</h1>
 
+    <p *ngIf="vacationNames.length" class="mb-4 text-sm text-slate-600">
+      In vacanza: {{ vacationNames.join(', ') }}
+    </p>
+
     <div class="flex items-center gap-3 mb-4">
       <button
         class="flex-1 rounded border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50"
@@ -17,7 +21,7 @@
       <button
         class="flex-1 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
         (click)="markDone()"
-        [disabled]="actionLoading"
+        [disabled]="actionLoading || !isMyTurn || isOnVacation"
       >
         Lavato
       </button>

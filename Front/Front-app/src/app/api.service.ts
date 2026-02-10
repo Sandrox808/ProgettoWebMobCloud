@@ -1,6 +1,20 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
+
+export type QueueItem = {
+  username: string;
+  user_id: number;
+  is_on_vacation: number;
+  order_num: number;
+  last_skipped: number | null;
+};
+
+export type QueueResponse = {
+  queue: QueueItem[];
+  currentUser?: string;
+  isMyTurn?: boolean;
+};
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -8,92 +22,80 @@ export class ApiService {
 
   constructor(private http: HttpClient) {}
 
-  async login(username: string, password: string): Promise<{ token: string }> {
-    return await firstValueFrom(
+  /** Backend si aspetta Authorization: <token> (nudo) */
+  private authOptions() {
+    const token = localStorage.getItem('token') || '';
+    return {
+      headers: new HttpHeaders({
+        Authorization: token
+      })
+    };
+  }
+
+  login(username: string, password: string): Promise<{ token: string }> {
+    return firstValueFrom(
       this.http.post<{ token: string }>(`${this.baseUrl}/login`, { username, password })
     );
   }
 
-  async register(username: string, password: string): Promise<{ userId: number }> {
-    return await firstValueFrom(
+  register(username: string, password: string): Promise<{ userId: number }> {
+    return firstValueFrom(
       this.http.post<{ userId: number }>(`${this.baseUrl}/register`, { username, password })
     );
   }
 
-  async getQueue(): Promise<{ queue: any[]; currentUser?: string; isMyTurn?: boolean }> {
-    const token = localStorage.getItem('token') ?? '';
-    return await firstValueFrom(
-      this.http.get<{ queue: any[]; currentUser?: string; isMyTurn?: boolean }>(
-        `${this.baseUrl}/queue`,
-        {
-        headers: { Authorization: token }
-        }
-      )
+  getQueue(): Promise<QueueResponse> {
+    return firstValueFrom(
+      this.http.get<QueueResponse>(`${this.baseUrl}/queue`, this.authOptions())
     );
   }
 
-  async getParticipantsList(): Promise<{ names: string[]; updated_at: number | null }> {
-    const token = localStorage.getItem('token') ?? '';
-    return await firstValueFrom(
+  getParticipantsList(): Promise<{ names: string[]; updated_at: number | null }> {
+    return firstValueFrom(
       this.http.get<{ names: string[]; updated_at: number | null }>(
         `${this.baseUrl}/partecipantslist`,
-        {
-          headers: { Authorization: token }
-        }
+        this.authOptions()
       )
     );
   }
 
-  async saveParticipantsList(names: string[]): Promise<{ updated_at: number }> {
-    const token = localStorage.getItem('token') ?? '';
-    return await firstValueFrom(
+  saveParticipantsList(names: string[]): Promise<{ updated_at: number }> {
+    return firstValueFrom(
       this.http.post<{ updated_at: number }>(
         `${this.baseUrl}/partecipantslist`,
         { names },
-        {
-          headers: { Authorization: token }
-        }
+        this.authOptions()
       )
     );
   }
 
-  async actionDone(): Promise<{ message: string }> {
-    const token = localStorage.getItem('token') ?? '';
-    return await firstValueFrom(
+  actionDone(): Promise<{ message: string }> {
+    return firstValueFrom(
       this.http.post<{ message: string }>(
         `${this.baseUrl}/action/done`,
         {},
-        {
-          headers: { Authorization: token }
-        }
+        this.authOptions()
       )
     );
   }
 
-  async actionSkip(): Promise<{ message: string }> {
-    const token = localStorage.getItem('token') ?? '';
-    return await firstValueFrom(
+  actionSkip(): Promise<{ message: string }> {
+    return firstValueFrom(
       this.http.post<{ message: string }>(
         `${this.baseUrl}/action/skip`,
         {},
-        {
-          headers: { Authorization: token }
-        }
+        this.authOptions()
       )
     );
   }
 
-  async toggleVacation(status: boolean): Promise<{ message: string; is_on_vacation: boolean }> {
-    const token = localStorage.getItem('token') ?? '';
-    return await firstValueFrom(
+  toggleVacation(status: boolean): Promise<{ message: string; is_on_vacation: boolean }> {
+    return firstValueFrom(
       this.http.post<{ message: string; is_on_vacation: boolean }>(
         `${this.baseUrl}/user/toggle-vacation`,
         { status },
-        {
-          headers: { Authorization: token }
-        }
+        this.authOptions()
       )
     );
   }
-
 }

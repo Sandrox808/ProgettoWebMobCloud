@@ -6,6 +6,8 @@
       class="w-full mb-3 rounded border p-2"
       placeholder="Username"
       [(ngModel)]="username"
+      [disabled]="loading"
+      (keyup.enter)="doLogin()"
     />
 
     <input
@@ -13,19 +15,27 @@
       type="password"
       placeholder="Password"
       [(ngModel)]="password"
+      [disabled]="loading"
+      (keyup.enter)="doLogin()"
     />
 
     <button
-      class="w-full rounded bg-blue-600 text-white py-2 hover:bg-blue-700"
+      class="w-full rounded bg-blue-600 text-white py-2 hover:bg-blue-700 disabled:bg-slate-400 disabled:cursor-not-allowed"
       (click)="doLogin()"
+      [disabled]="loading || !username || !password"
     >
-      Accedi
+      <span *ngIf="!loading">Accedi</span>
+      <span *ngIf="loading">Accesso in corso…</span>
     </button>
 
-    <p *ngIf="error" class="text-sm text-red-600 mt-3">{{ error }}</p>
+    <p *ngIf="error" class="text-sm text-red-600 mt-3">
+      {{ error }}
+    </p>
 
     <div class="mt-4 text-center">
-      <a class="text-blue-600 hover:underline" routerLink="/">Torna alla home</a>
+      <a class="text-blue-600 hover:underline" routerLink="/">
+        Torna alla home
+      </a>
     </div>
   </div>
 </div>

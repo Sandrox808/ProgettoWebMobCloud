@@ -106,7 +106,6 @@ ProgettoWeb
 │           │   ├───landing                # Pagina iniziale
 │           │   ├───login                  # Login + token
 │           │   ├───register               # Registrazione
-│           │   ├───partecipanti           # Lista nomi + drag & drop + salvataggio
 │           │   └───namePicker             # Turno corrente + azioni Salta/Lavato
 │           └───styles.css                 # Tailwind import
 └───Insp

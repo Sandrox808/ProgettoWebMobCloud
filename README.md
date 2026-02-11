@@ -139,3 +139,6 @@ ProgettoWeb
 └───Insp
     └───LineTrack // Inspirazione o Base di partenza 
 ```
+
+
+> **Nota sullo sviluppo**: Gran parte del codice presente in questo repository è stato generato con il supporto di strumenti di Intelligenza Artificiale. Ogni modulo è stato successivamente revisionato, testato e rifinito manualmente per garantirne la coerenza e la qualità.

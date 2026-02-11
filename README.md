@@ -1,11 +1,39 @@
 # Progetto Applicazioni Web Mobile   
 
 ## Overwiew   
-Il progetto nasce come la trasposizione in webapp di un programma per il tracciamento della responsabilità di lavapiatti di un  gruppo di persone. 
+Il progetto nasce come la trasposizione in webapp di un programma per il tracciamento della responsabilità di lavapiatti di un  gruppo di persone.
+
+## Funzionalità
+
+La funzionalità principale della web app è la gestione di una lista di persone per coordinare la risoluzione di un problema comune (in questo caso, i turni per lavare i piatti).
+
+Di seguito una panoramica delle pagine principali.
+
+#### Landing
+È la prima pagina mostrata all’utente. Contiene una card introduttiva con due azioni disponibili: **Login** e **Registrati**.
+
+#### Registrati
+Permette a un nuovo utente di creare un account e, successivamente, accedere all’app.
+
+#### Login
+Permette all’utente di autenticarsi in modo sicuro e accedere alla propria area personale.
+
+#### NamePicker
+La pagina `/namePicker` è il centro operativo dell’app: mostra il giorno corrente, la persona di turno, la lista degli utenti ed i seguenti pulsanti:
+
+1. **Lava**  
+   Usato dalla persona di turno per confermare di aver svolto il compito. Il suo nome viene spostato in fondo alla lista.
+
+2. **Vacanza**  
+   Usato dalla persona di turno per indicare la sospensione temporanea dalla rotazione. Il nome viene rimosso dalla lista attiva; premendo di nuovo il pulsante, viene reinserito.
+
+3. **Salta**  
+   Può essere usato da tutti. Passa il turno alla persona successiva quando quella corrente non può svolgere il compito; il nome della persona saltata viene rimesso in testa alla lista.
+
 
 ## Architettura   
 ### Frontend  
-Il frontend è sviluppato con Angular e TailwindCSS e comunica con il backend tramite API REST (proxy `/api` in sviluppo).  
+Il frontend è sviluppato con Angular e TailwindCSS e comunica con il backend tramite API REST.  
 La UI è composta da una Landing page con accesso a login/registrazione; dopo il login l’utente entra nella pagina di gestione dei turni (NamePicker).
 
 Dettagli tecnici:

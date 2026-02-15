@@ -6,7 +6,7 @@
 }
 
 .panel {
-  width: min(420px, 100%);
+  width: min(980px, 100%);
 }
 
 .content {
@@ -15,14 +15,28 @@
   margin-top: 12px;
 }
 
-.loading-inline {
-  display: inline-flex;
+.toolbar-row {
+  display: flex;
   align-items: center;
-  gap: 8px;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.table-wrapper {
+  overflow: auto;
+}
+
+.full-table {
+  width: 100%;
 }
 
 .error-text {
   color: var(--app-error);
-  font-size: 14px;
+  margin: 0;
+}
+
+.hint-text {
+  color: var(--app-muted);
   margin: 0;
 }

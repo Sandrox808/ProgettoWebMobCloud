@@ -33,7 +33,7 @@ La pagina `/namePicker` è il centro operativo dell’app: mostra il giorno corr
 
 ## Architettura   
 ### Frontend  
-Il frontend è sviluppato con Angular e TailwindCSS e comunica con il backend tramite API REST.  
+Il frontend è sviluppato con Angular e TailwindCSS e comunica con il backend tramite API RESTBacl.  
 La UI è composta da una Landing page con accesso a login/registrazione; dopo il login l’utente entra nella pagina di gestione dei turni (NamePicker).
 
 Dettagli tecnici:

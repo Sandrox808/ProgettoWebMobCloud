@@ -1,57 +1,52 @@
-<div class="min-h-screen flex items-center justify-center bg-slate-100">
-  <div class="w-full max-w-xl rounded-2xl bg-white p-6 shadow">
-    <p class="text-slate-600 mb-2">
-      Oggi è {{ currentDayLabel }} Tocca a:
-    </p>
+<!-- Pagina operativa: mostra il turno corrente, la settimana e le azioni sulla coda. -->
+<div class="page-center">
+  <mat-card appearance="outlined" class="panel">
+    <mat-card-header>
+      <mat-card-title class="text-title">Turno Corrente</mat-card-title>
+      <mat-card-subtitle class="text-subtitle">Oggi è {{ currentDayLabel }} - Tocca a {{ currentName || 'Nessuno' }}</mat-card-subtitle>
+    </mat-card-header>
 
-    <h1 class="text-4xl font-extrabold mb-6">{{ currentName || 'Nessuno' }}</h1>
+    <mat-card-content class="content">
+      <mat-chip-set *ngIf="vacationNames.length" aria-label="Utenti in vacanza">
+        <mat-chip disabled *ngFor="let name of vacationNames">{{ name }}</mat-chip>
+      </mat-chip-set>
 
-    <p *ngIf="vacationNames.length" class="mb-4 text-sm text-slate-600">
-      In vacanza: {{ vacationNames.join(', ') }}
-    </p>
+      <div class="actions-row">
+        <button mat-flat-button class="text-label text-on-accent btn-tonal-alt" type="button" (click)="markSkip()" [disabled]="actionLoading">
+          Salta
+        </button>
+        <button
+          mat-flat-button
+          class="text-label text-on-accent btn-tonal-cta"
+          type="button"
+          (click)="markDone()"
+          [disabled]="actionLoading || !isMyTurn || isOnVacation"
+        >
+          Lavato
+        </button>
+      </div>
 
-    <div class="flex items-center gap-3 mb-4">
-      <button
-        class="flex-1 rounded border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50"
-        (click)="markSkip()"
-        [disabled]="actionLoading"
-      >
-        Salta
-      </button>
-      <button
-        class="flex-1 rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
-        (click)="markDone()"
-        [disabled]="actionLoading || !isMyTurn || isOnVacation"
-      >
-        Lavato
-      </button>
-    </div>
-
-    <div class="mb-6">
-      <button
-        class="w-full rounded border border-slate-300 px-4 py-2 text-slate-700 hover:bg-slate-50"
-        (click)="toggleVacation()"
-        [disabled]="actionLoading"
-      >
+      <button mat-flat-button class="text-label text-on-accent btn-tonal" type="button" (click)="toggleVacation()" [disabled]="actionLoading">
         {{ isOnVacation ? 'Torno disponibile' : 'Vado in vacanza' }}
       </button>
-    </div>
 
-    <p *ngIf="actionLoading" class="mb-4 text-sm text-slate-600">
-      Aggiornamento in corso: {{ actionLabel }}...
-    </p>
+      <mat-progress-bar *ngIf="actionLoading || loading" mode="indeterminate"></mat-progress-bar>
+      <p *ngIf="actionLoading" class="hint-text text-caption">Aggiornamento in corso: {{ actionLabel }}...</p>
 
-    <h2 class="text-lg font-semibold mb-2">Restante settimana</h2>
-    <div class="divide-y">
-      <div
-        *ngFor="let item of weekList"
-        class="flex items-center justify-between py-2"
-      >
-        <span>{{ item.name }}</span>
-        <span class="text-slate-500 text-sm">{{ item.dayLabel }}</span>
+      <h3 class="text-body-strong">Restante settimana</h3>
+      <mat-list>
+        <mat-list-item *ngFor="let item of weekList">
+          <span matListItemTitle class="text-body-strong">{{ item.name }}</span>
+          <span matListItemLine class="text-caption">{{ item.dayLabel }}</span>
+        </mat-list-item>
+      </mat-list>
+
+      <div class="actions-row">
+        <a mat-flat-button class="text-label text-on-accent btn-tonal" routerLink="/history">History</a>
+        <a mat-flat-button class="text-label text-on-accent btn-tonal" routerLink="/stats">Stats</a>
       </div>
-    </div>
 
-    <p *ngIf="message" class="mt-3 text-sm text-red-600">{{ message }}</p>
-  </div>
+      <p *ngIf="message" class="error-text text-feedback-error">{{ message }}</p>
+    </mat-card-content>
+  </mat-card>
 </div>

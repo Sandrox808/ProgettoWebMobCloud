@@ -1,1 +1,12 @@
-<router-outlet></router-outlet>
+<mat-toolbar *ngIf="showTopbar()" color="primary" class="topbar">
+  <span class="brand text-title text-on-accent" routerLink="/namePicker">Turni</span>
+  <span class="spacer"></span>
+  <a mat-button class="text-label text-on-accent" routerLink="/namePicker" routerLinkActive="active-link">NamePicker</a>
+  <a mat-button class="text-label text-on-accent" routerLink="/history" routerLinkActive="active-link">History</a>
+  <a mat-button class="text-label text-on-accent" routerLink="/stats" routerLinkActive="active-link">Stats</a>
+  <button mat-flat-button class="text-label text-on-accent btn-tonal-cta" type="button" (click)="logout()">Logout</button>
+</mat-toolbar>
+
+<main class="main-layout" [class.with-topbar]="showTopbar()">
+  <router-outlet></router-outlet>
+</main>

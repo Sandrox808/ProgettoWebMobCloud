@@ -1,7 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatListModule } from '@angular/material/list';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { ApiService } from '../api.service';
 
+/** Record locale della coda usato dalla vista `namePicker`. */
 type QueueItem = {
   username: string;
   user_id: number;
@@ -13,10 +20,19 @@ type QueueItem = {
 @Component({
   selector: 'app-name-picker',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    RouterLink,
+    MatCardModule,
+    MatButtonModule,
+    MatProgressBarModule,
+    MatListModule,
+    MatChipsModule
+  ],
   templateUrl: './namePicker.component.html',
   styleUrls: ['./namePicker.component.css']
 })
+/** Mostra e gestisce la coda settimanale dei turni, incluse azioni e stato vacanza. */
 export class NamePickerComponent implements OnInit {
   queue: QueueItem[] = [];
 
@@ -35,6 +51,7 @@ export class NamePickerComponent implements OnInit {
   actionLabel = '';
   private actionTimeoutId: number | null = null;
 
+  /** Elenco dei soli utenti attualmente segnati come in vacanza. */
   get vacationNames(): string[] {
     return this.queue
       .filter((u) => u.is_on_vacation === 1)
@@ -87,7 +104,6 @@ export class NamePickerComponent implements OnInit {
       this.message = this.getApiErrorMessage(e, 'Errore nel caricamento della coda');
     } finally {
       this.loading = false;
-      // FIX: forziamo il render anche se Angular non ha triggerato CD per questa microtask
       this.cdr.detectChanges();
     }
   }
@@ -178,6 +194,7 @@ export class NamePickerComponent implements OnInit {
     }
   }
 
+  /** Avvia lo stato di azione con label e timeout di sicurezza per evitare loading bloccato. */
   private startAction(label: string) {
     this.actionLoading = true;
     this.actionLabel = label;
@@ -194,6 +211,7 @@ export class NamePickerComponent implements OnInit {
     }, 10000);
   }
 
+  /** Chiude lo stato di azione corrente e pulisce eventuali timeout pendenti. */
   private endAction() {
     this.actionLoading = false;
     this.actionLabel = '';
@@ -204,6 +222,7 @@ export class NamePickerComponent implements OnInit {
     }
   }
 
+  /** Applica localmente la rotazione della coda equivalente all'azione "lavato". */
   private optimisticDone() {
     const activeQueue = this.queue.filter((u) => u.is_on_vacation === 0);
     if (activeQueue.length === 0) return;
@@ -215,6 +234,7 @@ export class NamePickerComponent implements OnInit {
     this.applyOptimisticQueue(updatedActive);
   }
 
+  /** Applica localmente il salto turno rispettando il cooldown del backend. */
   private optimisticSkip() {
     const now = Date.now();
     const COOLDOWN_MS = 30 * 60 * 1000;
@@ -237,11 +257,13 @@ export class NamePickerComponent implements OnInit {
     this.applyOptimisticQueue(updatedActive);
   }
 
+  /** Normalizza il timestamp `last_skipped` ricevuto dal backend. */
   private normalizeLastSkipped(value: number | null): number | null {
     if (!value) return null;
     return value; // backend usa ms
   }
 
+  /** Ricostruisce i dati visualizzati in UI partendo da una coda attiva già ordinata. */
   private applyOptimisticQueue(activeQueue: QueueItem[]) {
     const inactive = this.queue.filter((u) => u.is_on_vacation === 1);
     this.queue = [...activeQueue, ...inactive];
@@ -263,6 +285,7 @@ export class NamePickerComponent implements OnInit {
     }));
   }
 
+  /** Ricostruisce la vista della settimana a partire dalla coda completa ricevuta dal backend. */
   private buildWeekList() {
     const activeQueue = this.queue.filter((u) => u.is_on_vacation === 0);
 
@@ -283,22 +306,26 @@ export class NamePickerComponent implements OnInit {
     }));
   }
 
+  /** Restituisce una nuova data ottenuta sommando `days` giorni a `date`. */
   private addDays(date: Date, days: number) {
     const d = new Date(date);
     d.setDate(d.getDate() + days);
     return d;
   }
 
+  /** Converte una data nel formato breve usato in pagina (es. "Lunedì 14"). */
   private formatDayLabel(date: Date) {
     const day = date.toLocaleDateString('it-IT', { weekday: 'long' });
     const num = date.getDate();
     return `${this.capitalize(day)} ${num}`;
   }
 
+  /** Capitalizza la prima lettera della stringa passata. */
   private capitalize(value: string) {
     return value.charAt(0).toUpperCase() + value.slice(1);
   }
 
+  /** Estrae il messaggio errore API in forma sicura con fallback. */
   private getApiErrorMessage(error: unknown, fallback: string) {
     const anyErr = error as { error?: { error?: string } };
     const message = anyErr?.error?.error;

@@ -1,0 +1,8 @@
+{
+    "editor.mouseWheelZoom": true,
+    "editor.aiStats.enabled": false,
+    "editor.rulers": [
+        80, 
+        120
+    ]
+}

@@ -1,0 +1,52 @@
+.page-center {
+  min-height: calc(100vh - 120px);
+  display: grid;
+  place-items: center;
+  padding: 16px;
+}
+
+.panel {
+  width: min(980px, 100%);
+}
+
+.content {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.toolbar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.value-text {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.hint-text {
+  color: var(--app-muted);
+  margin: 0;
+}
+
+.error-text {
+  color: var(--app-error);
+  margin: 0;
+}
+
+@media (max-width: 900px) {
+  .cards-grid {
+    grid-template-columns: 1fr;
+  }
+}

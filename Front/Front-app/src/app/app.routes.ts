@@ -3,6 +3,8 @@ import { LandingComponent } from './landing/landing.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
 import { NamePickerComponent } from './namePicker/namePicker.component';
+import { HistoryComponent } from './history/history.component';
+import { StatsComponent } from './stats/stats.component';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
@@ -10,5 +12,7 @@ export const routes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
   { path: 'namePicker', component: NamePickerComponent, canActivate: [authGuard] },
+  { path: 'history', component: HistoryComponent, canActivate: [authGuard] },
+  { path: 'stats', component: StatsComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];

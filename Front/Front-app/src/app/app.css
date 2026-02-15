@@ -1,0 +1,29 @@
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+
+.brand {
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.active-link {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.main-layout {
+  min-height: calc(100vh - 56px);
+  padding: 16px;
+}
+
+.main-layout.with-topbar {
+  padding-top: 20px;
+}

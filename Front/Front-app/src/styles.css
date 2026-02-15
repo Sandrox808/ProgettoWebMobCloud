@@ -1,3 +1,202 @@
-/* You can add global styles to this file, and also import other style files */
-
+/* Tema Material globale + Tailwind utilities. */
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
 @import "tailwindcss";
+
+:root {
+  /* Sfondo globale dell'app (pagina intera, aree fuori dai pannelli Material). */
+  --app-bg: #2c2c2c;
+  /* Colore testo base usato da body e ruoli testuali principali. */
+  --app-text: #000000;
+  /* Accento freddo: titoli, link, elementi evidenziati secondari. */
+  --app-accent-1: #a8dadc;
+  /* Accento caldo: sottotitoli, feedback soft, elementi di supporto. */
+  --app-accent-2: #ffc1cc;
+  /* Colore principale per CTA (bottoni primari e azioni principali). */
+  --app-cta: #b39cd0;
+  /* Superficie primaria di card/pannelli Material. */
+  --app-surface: #383838;
+  /* Superficie secondaria (es. campi input e varianti interne). */
+  --app-surface-2: #444444;
+  /* Alias esplicito della superficie primaria usata dai token Material. */
+  --app-surface-primary: var(--app-surface);
+  /* Testo attenuato per caption, hint e metadati. */
+  --app-muted: #000000;
+  /* Colore feedback errore. */
+  --app-error: #ffc1cc;
+  /* Colore feedback successo. */
+  --app-success: #a8dadc;
+  /* Colore testo su superfici accentate (toolbar, bottoni filled). */
+  --app-on-accent: #2c2c2c;
+}
+
+html, body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: var(--app-bg);
+  color: var(--app-text);
+}
+
+/* Material global tokens */
+html {
+  color-scheme: dark;
+  --mat-sys-primary: var(--app-cta);
+  --mat-sys-on-primary: var(--app-on-accent);
+  --mat-sys-secondary: var(--app-accent-1);
+  --mat-sys-tertiary: var(--app-accent-2);
+  /* Superficie primaria Material agganciata alla palette app. */
+  --mat-sys-surface: var(--app-surface-primary);
+  --mat-sys-surface-container: var(--app-surface-primary);
+  --mat-sys-surface-container-low: var(--app-surface-primary);
+  --mat-sys-surface-container-high: var(--app-surface-2);
+  --mat-sys-on-surface: var(--app-text);
+  --mat-sys-outline: var(--app-muted);
+}
+
+/* Material component overrides */
+.mat-mdc-card {
+  background-color: var(--app-surface);
+  color: var(--app-text);
+  border-radius: 20px !important;
+  border: 1px solid color-mix(in srgb, var(--app-accent-1) 35%, transparent) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+}
+
+.mat-toolbar.mat-primary {
+  background: var(--app-accent-1);
+  color: var(--app-on-accent);
+}
+
+.mat-mdc-unelevated-button.mat-primary {
+  --mdc-filled-button-container-color: var(--app-cta);
+  --mdc-filled-button-label-text-color: var(--app-on-accent);
+}
+
+.mat-mdc-button-base {
+  border-radius: 999px !important;
+  min-height: 40px;
+  padding-inline: 16px;
+}
+
+.btn-tonal {
+  --mdc-filled-button-container-color: var(--app-accent-1);
+  --mdc-filled-button-label-text-color: var(--app-on-accent);
+}
+
+.btn-tonal-alt {
+  --mdc-filled-button-container-color: var(--app-accent-2);
+  --mdc-filled-button-label-text-color: var(--app-on-accent);
+}
+
+.btn-tonal-cta {
+  --mdc-filled-button-container-color: var(--app-cta);
+  --mdc-filled-button-label-text-color: var(--app-on-accent);
+}
+
+.mat-mdc-outlined-button {
+  --mdc-outlined-button-label-text-color: var(--app-text);
+  --mdc-outlined-button-outline-color: var(--app-accent-1);
+}
+
+.mat-mdc-button {
+  --mdc-text-button-label-text-color: var(--app-accent-1);
+}
+
+.mat-mdc-form-field {
+  --mdc-filled-text-field-container-color: var(--app-surface-2);
+  --mdc-outlined-text-field-outline-color: var(--app-muted);
+  --mdc-outlined-text-field-focus-outline-color: var(--app-accent-1);
+  --mdc-outlined-text-field-input-text-color: var(--app-text);
+  --mdc-outlined-text-field-label-text-color: var(--app-muted);
+}
+
+.mat-mdc-table,
+.mat-mdc-header-row,
+.mat-mdc-row {
+  background-color: var(--app-surface);
+  color: var(--app-text);
+}
+
+a {
+  color: var(--app-accent-1);
+}
+
+/* Global text roles */
+.text-display {
+  font-size: clamp(1.9rem, 3.2vw, 2.5rem);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  color: var(--app-text);
+}
+
+.text-title {
+  font-size: clamp(1.35rem, 2.2vw, 1.8rem);
+  line-height: 1.2;
+  font-weight: 600;
+  letter-spacing: 0.005em;
+  color: var(--app-text);
+}
+
+.text-subtitle {
+  font-size: 1rem;
+  line-height: 1.35;
+  font-weight: 500;
+  color: var(--app-text);
+}
+
+.text-body {
+  font-size: 0.98rem;
+  line-height: 1.55;
+  font-weight: 400;
+  color: var(--app-text);
+}
+
+.text-body-strong {
+  font-size: 1rem;
+  line-height: 1.5;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.text-label {
+  font-size: 0.9rem;
+  line-height: 1.2;
+  font-weight: 600;
+  color: var(--app-text);
+}
+
+.text-caption {
+  font-size: 0.82rem;
+  line-height: 1.3;
+  font-weight: 400;
+  color: var(--app-muted);
+}
+
+.text-metric {
+  font-size: 1.3rem;
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--app-text);
+}
+
+.text-feedback-error {
+  font-size: 0.9rem;
+  line-height: 1.3;
+  font-weight: 500;
+  color: var(--app-text);
+}
+
+.text-feedback-success {
+  font-size: 0.9rem;
+  line-height: 1.3;
+  font-weight: 500;
+  color: var(--app-text);
+}
+
+.text-on-accent {
+  color: var(--app-on-accent);
+}

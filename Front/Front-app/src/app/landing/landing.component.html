@@ -1,23 +1,16 @@
-<div class="min-h-screen flex items-center justify-center bg-slate-100">
-  <div class="w-full max-w-md rounded-2xl bg-white p-8 shadow">
-    <h1 class="text-3xl font-bold mb-2">Benvenuto</h1>
-    <p class="text-slate-600 mb-6">
-      Gestisci i turni in modo semplice. Accedi o crea un nuovo account.
-    </p>
-
-    <div class="flex gap-3">
-      <a
-        class="flex-1 rounded bg-blue-600 text-white py-2 text-center hover:bg-blue-700"
-        routerLink="/login"
-      >
-        Login
-      </a>
-      <a
-        class="flex-1 rounded border border-slate-300 py-2 text-center hover:bg-slate-50"
-        routerLink="/register"
-      >
-        Registrati
-      </a>
-    </div>
-  </div>
+<!-- Landing page: presenta l'app e indirizza a login o registrazione. -->
+<div class="page-center">
+  <mat-card appearance="outlined" class="panel">
+    <mat-card-header>
+      <mat-card-title class="text-display">Benvenuto</mat-card-title>
+      <mat-card-subtitle class="text-subtitle">Gestisci i turni in modo semplice.</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content class="text-body">
+      Accedi o crea un nuovo account per entrare nella gestione turni.
+    </mat-card-content>
+    <mat-card-actions align="end">
+      <a mat-flat-button class="text-label text-on-accent btn-tonal-alt" routerLink="/register">Registrati</a>
+      <a mat-flat-button class="text-label text-on-accent btn-tonal-cta" routerLink="/login">Login</a>
+    </mat-card-actions>
+  </mat-card>
 </div>

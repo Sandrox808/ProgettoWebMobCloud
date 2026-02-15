@@ -1,0 +1,60 @@
+<!-- Pagina stats: mostra campione, atleta e statistiche personali del periodo selezionato. -->
+<div class="page-center">
+  <mat-card appearance="outlined" class="panel">
+    <mat-card-header>
+      <mat-card-title class="text-title">Stats</mat-card-title>
+      <mat-card-subtitle class="text-subtitle">Statistiche aggregate e personali</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content class="content">
+      <div class="toolbar-row">
+        <button mat-flat-button class="text-label text-on-accent btn-tonal" type="button" (click)="previousMonth()" [disabled]="loading">
+          Mese precedente
+        </button>
+        <span class="text-body">Periodo: {{ month }}/{{ year }}</span>
+        <button mat-flat-button class="text-label text-on-accent btn-tonal" type="button" (click)="nextMonth()" [disabled]="loading">
+          Mese successivo
+        </button>
+      </div>
+
+      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+      <p *ngIf="message" class="error-text text-feedback-error">{{ message }}</p>
+
+      <div *ngIf="stats" class="cards-grid">
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-card-title class="text-subtitle">Champ</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="value-text text-metric">{{ stats.champ.username }}</p>
+            <p class="hint-text text-caption">DONE: {{ stats.champ.count }}</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-card-title class="text-subtitle">Athlete</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="value-text text-metric">{{ stats.athlete.username }}</p>
+            <p class="hint-text text-caption">SKIP: {{ stats.athlete.count }}</p>
+          </mat-card-content>
+        </mat-card>
+
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-card-title class="text-subtitle">Le mie stats</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <p class="value-text text-metric">DONE: {{ stats.me.dones }}</p>
+            <p class="hint-text text-caption">Percentuale: {{ stats.me.percentage }}</p>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <a mat-flat-button class="text-label text-on-accent btn-tonal" routerLink="/namePicker">Torna a NamePicker</a>
+    </mat-card-actions>
+  </mat-card>
+</div>

@@ -39,6 +39,7 @@ router.post('/action/done', async (req, res) => {
     try {
         const { note } = req.body;
         const db = await getDB();
+        
         const firstActive = await db.get(`
             SELECT q.user_id 
             FROM queue q
@@ -54,8 +55,10 @@ router.post('/action/done', async (req, res) => {
 
         const last = await db.get('SELECT MAX(order_num) as maxOrder FROM queue');
         const tempHighOrder = (last.maxOrder || 0) + 1000;
+        
         await db.run('UPDATE queue SET order_num = ?, last_skipped = NULL WHERE user_id = ?', 
             [tempHighOrder, req.user.id]);
+        
         await normalizeQueue(db);
 
         await db.run(
@@ -70,7 +73,7 @@ router.post('/action/done', async (req, res) => {
     }
 });
 
-// 3. POST /action/skip - Logica anti-loop
+// 3. POST /action/skip - Logica di swap
 router.post('/action/skip', async (req, res) => {
     try {
         const { note } = req.body;
@@ -96,9 +99,11 @@ router.post('/action/skip', async (req, res) => {
         const COOLDOWN_MS = 30 * 60 * 1000; // 30min
         let target = null;
 
-        for (let i = 1; i < fullQueue.length; i++) {
+        for (let i = firstActiveIndex + 1; i < fullQueue.length; i++) {
             const candidate = fullQueue[i];
+            
             if (candidate.is_on_vacation === 1) continue;
+            
             const isRecentlySkipped = candidate.last_skipped && (now - candidate.last_skipped < COOLDOWN_MS);
 
             if (!isRecentlySkipped) {
@@ -107,11 +112,14 @@ router.post('/action/skip', async (req, res) => {
             }
         }
 
-        if (!target) {return res.status(400).json({ error: "Nessuno è presente, la coda è invariata" });}
+        if (!target) {
+            return res.status(400).json({ error: "Nessuno è presente, la coda è invariata" });
+        }
 
-        await db.run('UPDATE queue SET order_num = order_num + 1 WHERE order_num < ?', [target.order_num]);
-        await db.run('UPDATE queue SET order_num = 1 WHERE id = ?', [target.id]);
+        await db.run('UPDATE queue SET order_num = ? WHERE id = ?', [target.order_num, absentUser.id]);
+        await db.run('UPDATE queue SET order_num = ? WHERE id = ?', [absentUser.order_num, target.id]);
         await db.run('UPDATE queue SET last_skipped = ? WHERE id = ?', [now, absentUser.id]);
+        
         await normalizeQueue(db);
 
         await db.run(
@@ -119,7 +127,7 @@ router.post('/action/skip', async (req, res) => {
             [absentUser.user_id, 'SKIP', note || "Salto turno", now]
         );
 
-        res.json({ message: `Assenza segnalata. ${target.user_id} passa in cima.` });
+        res.json({ message: `Assenza segnalata. Scambio effettuato con ${target.user_id}.` });
 
     } catch (error) {
         console.error("[ERR] Skip:", error);

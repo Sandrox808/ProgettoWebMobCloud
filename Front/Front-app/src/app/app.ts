@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
-import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
   selector: 'app-root',
@@ -11,7 +10,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     RouterOutlet,
     RouterLink,
     RouterLinkActive,
-    MatToolbarModule,
     MatButtonModule
   ],
   templateUrl: './app.html',
@@ -19,6 +17,10 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 })
 export class App {
   constructor(private router: Router) {}
+
+  get accountName(): string {
+    return localStorage.getItem('username') || 'Account';
+  }
 
   /** Mostra la top bar solo quando esiste un token e non siamo su rotte pubbliche. */
   showTopbar(): boolean {
@@ -32,6 +34,7 @@ export class App {
   /** Rimuove il token locale e riporta l'utente alla pagina di login. */
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('username');
     void this.router.navigate(['/login']);
   }
 }

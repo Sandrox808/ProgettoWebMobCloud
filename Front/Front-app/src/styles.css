@@ -1,32 +1,24 @@
 /* Tema Material globale + Tailwind utilities. */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import url('https://fonts.googleapis.com/css2?family=Modak&family=Mulish:wght@400;600&display=swap');
 @import "tailwindcss";
 
 :root {
-  /* Sfondo globale dell'app (pagina intera, aree fuori dai pannelli Material). */
-  --app-bg: #2c2c2c;
-  /* Colore testo base usato da body e ruoli testuali principali. */
+  --app-bg: #F2EFC7;
+  --app-bg1: #0A0903;
   --app-text: #000000;
-  /* Accento freddo: titoli, link, elementi evidenziati secondari. */
-  --app-accent-1: #a8dadc;
-  /* Accento caldo: sottotitoli, feedback soft, elementi di supporto. */
-  --app-accent-2: #ffc1cc;
-  /* Colore principale per CTA (bottoni primari e azioni principali). */
-  --app-cta: #b39cd0;
-  /* Superficie primaria di card/pannelli Material. */
-  --app-surface: #383838;
-  /* Superficie secondaria (es. campi input e varianti interne). */
-  --app-surface-2: #444444;
-  /* Alias esplicito della superficie primaria usata dai token Material. */
+  --app-text2: #FFFFFF;
+  --app-accent-1: #4AA15E;
+  --app-accent-2: #DE0000;
+  --app-accent-3: #BD666D;
+  --app-cta: var(--app-accent-1);
+  --app-surface: color-mix(in srgb, var(--app-bg) 92%, white);
+  --app-surface-2: color-mix(in srgb, var(--app-bg) 84%, white);
   --app-surface-primary: var(--app-surface);
-  /* Testo attenuato per caption, hint e metadati. */
-  --app-muted: #000000;
-  /* Colore feedback errore. */
-  --app-error: #ffc1cc;
-  /* Colore feedback successo. */
-  --app-success: #a8dadc;
-  /* Colore testo su superfici accentate (toolbar, bottoni filled). */
-  --app-on-accent: #2c2c2c;
+  --app-muted: color-mix(in srgb, var(--app-text) 58%, var(--app-bg));
+  --app-error: var(--app-accent-1);
+  --app-success: var(--app-accent-2);
+  --app-on-accent: var(--app-bg);
 }
 
 html, body {
@@ -35,18 +27,18 @@ html, body {
 
 body {
   margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: "Mulish", "Muli", sans-serif;
   background: var(--app-bg);
   color: var(--app-text);
 }
 
 /* Material global tokens */
 html {
-  color-scheme: dark;
-  --mat-sys-primary: var(--app-cta);
+  color-scheme: light;
+  --mat-sys-primary: var(--app-accent-1);
   --mat-sys-on-primary: var(--app-on-accent);
-  --mat-sys-secondary: var(--app-accent-1);
-  --mat-sys-tertiary: var(--app-accent-2);
+  --mat-sys-secondary: var(--app-accent-2);
+  --mat-sys-tertiary: var(--app-accent-3);
   /* Superficie primaria Material agganciata alla palette app. */
   --mat-sys-surface: var(--app-surface-primary);
   --mat-sys-surface-container: var(--app-surface-primary);
@@ -111,6 +103,35 @@ html {
   --mdc-outlined-text-field-focus-outline-color: var(--app-accent-1);
   --mdc-outlined-text-field-input-text-color: var(--app-text);
   --mdc-outlined-text-field-label-text-color: var(--app-muted);
+}
+
+/* Override forti per neutralizzare colori del prebuilt theme */
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-raised-button.mat-primary {
+  --mdc-filled-button-container-color: var(--app-accent-1) !important;
+  --mdc-filled-button-label-text-color: var(--app-on-accent) !important;
+}
+
+.mat-mdc-button.mat-primary,
+.mat-mdc-outlined-button.mat-primary {
+  --mdc-text-button-label-text-color: var(--app-accent-1) !important;
+  --mdc-outlined-button-label-text-color: var(--app-accent-1) !important;
+  --mdc-outlined-button-outline-color: var(--app-accent-1) !important;
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: var(--app-accent-1) !important;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-floating-label {
+  color: var(--app-accent-1) !important;
+}
+
+.mat-mdc-progress-bar {
+  --mdc-linear-progress-active-indicator-color: var(--app-accent-1);
+  --mdc-linear-progress-track-color: color-mix(in srgb, var(--app-accent-1) 25%, transparent);
 }
 
 .mat-mdc-table,

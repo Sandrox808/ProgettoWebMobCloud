@@ -7,6 +7,37 @@
 
 .panel {
   width: min(760px, 100%);
+  border: none !important;
+}
+
+.panel mat-card-header {
+  padding-top: 40px; /* aumenta questo valore */
+  padding-bottom: 15px;
+    }
+    
+.current-turn {
+  display: grid;
+  gap: 4px;
+  justify-items: center;
+  text-align: center;
+}
+
+.current-turn-label {
+  font-family: "Mulish", "Muli", sans-serif;
+  font-size: 1.05rem;
+  font-weight: 500;
+  color: var(--app-text);
+}
+
+.current-turn-name {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-family: "Mulish", "Muli", sans-serif;
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--app-text);
 }
 
 .content {
@@ -17,8 +48,66 @@
 
 .actions-row {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 12px;
+}
+
+.links-row {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.action-btn {
+  min-height: 40px;
+  font-family: "Mulish", "Muli", sans-serif;
+  font-weight: 600;
+  --mdc-filled-button-label-text-weight: 600;
+}
+
+.action-btn-primary {
+  --mdc-filled-button-container-color: var(--mat-sys-primary);
+  --mdc-filled-button-label-text-color: var(--mat-sys-on-primary);
+}
+
+.action-btn-secondary {
+  --mdc-filled-button-container-color: var(--mat-sys-secondary);
+  --mdc-filled-button-label-text-color: var(--app-text1);
+}
+
+.action-btn-tertiary {
+  --mdc-filled-button-container-color: var(--mat-sys-tertiary);
+  --mdc-filled-button-label-text-color: var(--app-text1);
+}
+
+.action-btn-primary.mat-mdc-unelevated-button {
+  background-color: var(--app-accent-1) !important;
+  color: var(--app-text2) !important;
+}
+
+.action-btn-secondary.mat-mdc-unelevated-button {
+  background-color: var(--app-accent-2) !important;
+  color: var(--app-text2) !important;
+}
+
+.action-btn-tertiary.mat-mdc-unelevated-button {
+  background-color: var(--app-accent-3) !important;
+  color: var(--app-text2) !important;
+}
+
+.week-title {
+  margin: 6px 0 0;
+  font-family: "Mulish", "Muli", sans-serif;
+  font-size: clamp(1.2rem, 2.2vw, 1.6rem);
+  font-weight: 700;
+  color: var(--app-text);
+}
+
+.week-list .week-item:not(:last-child) {
+  border-bottom: 1px solid var(--app-text);
+}
+
+.week-list .week-item [matListItemTitle],
+.week-list .week-item [matListItemLine] {
+  color: var(--app-text) !important;
 }
 
 .hint-text {
@@ -29,4 +118,10 @@
 .error-text {
   color: var(--app-error);
   margin: 0;
+}
+
+@media (max-width: 700px) {
+  .actions-row {
+    grid-template-columns: 1fr;
+  }
 }

@@ -1,12 +1,22 @@
-<mat-toolbar *ngIf="showTopbar()" color="primary" class="topbar">
-  <span class="brand text-title text-on-accent" routerLink="/namePicker">Turni</span>
-  <span class="spacer"></span>
-  <a mat-button class="text-label text-on-accent" routerLink="/namePicker" routerLinkActive="active-link">NamePicker</a>
-  <a mat-button class="text-label text-on-accent" routerLink="/history" routerLinkActive="active-link">History</a>
-  <a mat-button class="text-label text-on-accent" routerLink="/stats" routerLinkActive="active-link">Stats</a>
-  <button mat-flat-button class="text-label text-on-accent btn-tonal-cta" type="button" (click)="logout()">Logout</button>
-</mat-toolbar>
+<div class="app-shell" [class.with-sidebar]="showTopbar()">
+  <aside *ngIf="showTopbar()" class="sidebar">
 
-<main class="main-layout" [class.with-topbar]="showTopbar()">
-  <router-outlet></router-outlet>
-</main>
+    <nav class="sidebar-nav">
+      <a mat-button class="nav-link text-label" routerLink="/namePicker" routerLinkActive="active-link">NamePicker</a>
+      <a mat-button class="nav-link text-label" routerLink="/history" routerLinkActive="active-link">History</a>
+      <a mat-button class="nav-link text-label" routerLink="/stats" routerLinkActive="active-link">Stats</a>
+    </nav>
+  </aside>
+
+  <main class="main-layout">
+    <header *ngIf="showTopbar()" class="content-topbar">
+      <span class="wtm-mark">WTM</span>
+      <div class="account-side">
+        <span class="account-name text-label">{{ accountName }}</span>
+        <button mat-flat-button class="logout-topbar-btn text-label" type="button" (click)="logout()">Logout</button>
+      </div>
+    </header>
+
+    <router-outlet></router-outlet>
+  </main>
+</div>

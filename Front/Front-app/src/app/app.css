@@ -1,29 +1,122 @@
-.topbar {
+.app-shell {
+  min-height: 100vh;
+}
+
+.app-shell.with-sidebar {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 18px;
+  padding: 5px 5px 10px 5px; /* top right bottom left */
+  align-items: start;
+}
+
+.sidebar {
   position: sticky;
   top: 0;
-  z-index: 20;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px 5px 5px;
+  background: var(--app-bg1);
+  color: var(--app-text2);
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
 }
 
-.brand {
-  cursor: pointer;
-  font-weight: 600;
+.brand-link {
+  justify-content: flex-start;
+  font-weight: 700;
+  color: var(--app-text2) !important;
+  --mdc-text-button-label-text-color: var(--app-text2);
 }
 
-.spacer {
-  flex: 1 1 auto;
+.sidebar-nav {
+  display: grid;
+  gap: 6px;
+}
+
+.nav-link {
+  justify-content: flex-start;
+  color: var(--app-text2) !important;
+  --mdc-text-button-label-text-color: var(--app-text2);
+}
+
+.logout-btn {
+  margin-top: 10px;
+  width: 100%;
 }
 
 .active-link {
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--app-accent-2) !important;
+  --mdc-text-button-label-text-color: var(--app-accent-2);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
 
 .main-layout {
-  min-height: calc(100vh - 56px);
-  padding: 16px;
+  min-height: calc(100vh - 36px);
+  padding: 0;
 }
 
-.main-layout.with-topbar {
-  padding-top: 20px;
+.content-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: transparent;
+  padding: 6px 6px 14px;
+}
+
+.wtm-mark {
+  font-family: "Modak", cursive;
+  font-size: var(--wtm-size, clamp(2rem, 4vw, 3.4rem));
+  line-height: 1;
+  letter-spacing: 0.01em;
+  color: var(--app-text);
+}
+
+.account-side {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.account-name {
+  font-family: "Mulish", "Muli", sans-serif;
+  color: var(--app-text);
+  font-weight: 600;
+}
+
+.logout-topbar-btn {
+  font-family: "Mulish", "Muli", sans-serif;
+  font-weight: 600;
+  color: var(--app-text2) !important;
+  --mdc-filled-button-container-color: var(--app-accent-2);
+  --mdc-filled-button-label-text-color: var(--app-text2);
+  --mdc-filled-button-label-text-weight: 600;
+}
+
+.logout-topbar-btn.mat-mdc-unelevated-button {
+  background-color: var(--app-accent-2) !important;
+  color: var(--app-text2) !important;
+}
+
+@media (max-width: 900px) {
+  .app-shell.with-sidebar {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+
+  .content-topbar {
+    padding-top: 10px;
+  }
+
+  .wtm-mark {
+    font-size: var(--wtm-size, clamp(1.6rem, 8vw, 2.4rem));
+  }
 }

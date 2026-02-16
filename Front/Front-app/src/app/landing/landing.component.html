@@ -1,16 +1,11 @@
 <!-- Landing page: presenta l'app e indirizza a login o registrazione. -->
 <div class="page-center">
-  <mat-card appearance="outlined" class="panel">
-    <mat-card-header>
-      <mat-card-title class="text-display">Benvenuto</mat-card-title>
-      <mat-card-subtitle class="text-subtitle">Gestisci i turni in modo semplice.</mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content class="text-body">
-      Accedi o crea un nuovo account per entrare nella gestione turni.
-    </mat-card-content>
-    <mat-card-actions align="end">
-      <a mat-flat-button class="text-label text-on-accent btn-tonal-alt" routerLink="/register">Registrati</a>
-      <a mat-flat-button class="text-label text-on-accent btn-tonal-cta" routerLink="/login">Login</a>
-    </mat-card-actions>
-  </mat-card>
+  <section class="landing-content">
+    <h1 class="landing-title">Washing Teller Machine</h1>
+    <p class="landing-subtitle">Gestici i tuoi turni in modo semplice</p>
+    <div class="landing-actions">
+      <a mat-flat-button class="landing-btn landing-btn-secondary" routerLink="/register">Registrati</a>
+      <a mat-flat-button class="landing-btn landing-btn-primary" routerLink="/login">Login</a>
+    </div>
+  </section>
 </div>

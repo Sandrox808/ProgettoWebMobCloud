@@ -7,14 +7,29 @@
     </mat-card-header>
 
     <mat-card-content class="content">
-      <div class="toolbar-row">
-        <button mat-flat-button class="text-label text-on-accent btn-tonal" type="button" (click)="previousMonth()" [disabled]="loading">
-          Mese precedente
-        </button>
-        <span class="text-body">Periodo: {{ month }}/{{ year }}</span>
-        <button mat-flat-button class="text-label text-on-accent btn-tonal" type="button" (click)="nextMonth()" [disabled]="loading">
-          Mese successivo
-        </button>
+      <div class="period-toolbar">
+        <a
+          class="period-nav-link text-body-strong"
+          role="button"
+          tabindex="0"
+          [class.is-disabled]="loading"
+          (click)="!loading && previousMonth()"
+          aria-label="Mese precedente"
+        >
+          &lt;
+        </a>
+        <span class="period-label text-body-strong">periodo:</span>
+        <span class="period-value text-body">{{ month }}/{{ year }}</span>
+        <a
+          class="period-nav-link text-body-strong"
+          role="button"
+          tabindex="0"
+          [class.is-disabled]="loading"
+          (click)="!loading && nextMonth()"
+          aria-label="Mese successivo"
+        >
+          &gt;
+        </a>
       </div>
 
       <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
@@ -51,9 +66,5 @@
         Nessuna azione trovata nel periodo selezionato.
       </p>
     </mat-card-content>
-
-    <mat-card-actions align="end">
-      <a mat-flat-button class="text-label text-on-accent btn-tonal" routerLink="/namePicker">Torna a NamePicker</a>
-    </mat-card-actions>
   </mat-card>
 </div>

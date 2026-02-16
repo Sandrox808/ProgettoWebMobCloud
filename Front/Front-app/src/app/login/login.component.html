@@ -30,13 +30,14 @@
 
       <button
         mat-flat-button
-        class="text-label text-on-accent btn-tonal-cta"
+         color="primary"
+        class="auth-btn login-submit-btn"
         type="button"
         (click)="doLogin()"
         [disabled]="loading || !username || !password"
       >
-        <span class="text-label text-on-accent" *ngIf="!loading">Accedi</span>
-        <span *ngIf="loading" class="loading-inline text-label text-on-accent">
+        <span *ngIf="!loading">Accedi</span>
+        <span *ngIf="loading" class="loading-inline">
           <mat-spinner diameter="18"></mat-spinner>
           Accesso in corso...
         </span>
@@ -45,8 +46,8 @@
       <p *ngIf="error" class="error-text text-feedback-error">{{ error }}</p>
     </mat-card-content>
 
-    <mat-card-actions align="end">
-      <a mat-flat-button class="text-label text-on-accent btn-tonal" routerLink="/">Torna alla home</a>
+    <mat-card-actions class="actions-link">
+      <a class="home-link" routerLink="/">Torna alla home</a>
     </mat-card-actions>
   </mat-card>
 </div>

@@ -22,7 +22,7 @@
         <input matInput type="password" [(ngModel)]="confirmPassword" [disabled]="loading" />
       </mat-form-field>
 
-      <button mat-flat-button class="text-label text-on-accent btn-tonal-cta" type="button" (click)="doRegister()" [disabled]="loading">
+      <button mat-flat-button color="primary" class="auth-btn register-submit-btn" type="button" (click)="doRegister()" [disabled]="loading">
         Registrati
       </button>
 
@@ -30,8 +30,8 @@
       <p *ngIf="success" class="success-text text-feedback-success">{{ success }}</p>
     </mat-card-content>
 
-    <mat-card-actions align="end">
-      <a mat-flat-button class="text-label text-on-accent btn-tonal" routerLink="/">Torna alla home</a>
+    <mat-card-actions class="actions-link">
+      <a class="home-link" routerLink="/">Torna alla home</a>
     </mat-card-actions>
   </mat-card>
 </div>

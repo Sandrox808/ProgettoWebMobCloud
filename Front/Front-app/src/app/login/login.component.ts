@@ -57,6 +57,7 @@ export class LoginComponent {
       // Salva token
       this.token = token;
       localStorage.setItem('token', token);
+      localStorage.setItem('username', this.username);
 
       // FIX: naviga nel "tick" successivo per evitare edge-case di render post-login
       setTimeout(() => {

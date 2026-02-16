@@ -2,8 +2,10 @@
 <div class="page-center">
   <mat-card appearance="outlined" class="panel">
     <mat-card-header>
-      <mat-card-title class="text-title">Turno Corrente</mat-card-title>
-      <mat-card-subtitle class="text-subtitle">Oggi è {{ currentDayLabel }} - Tocca a {{ currentName || 'Nessuno' }}</mat-card-subtitle>
+      <mat-card-subtitle class="current-turn">
+        <span class="current-turn-label">Oggi è {{ currentDayLabel }}, tocca a</span>
+        <span class="current-turn-name">{{ currentName || 'Nessuno' }}</span>
+      </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content class="content">
@@ -12,12 +14,27 @@
       </mat-chip-set>
 
       <div class="actions-row">
-        <button mat-flat-button class="text-label text-on-accent btn-tonal-alt" type="button" (click)="markSkip()" [disabled]="actionLoading">
+        <button
+          mat-flat-button
+          class="action-btn action-btn-tertiary text-label"
+          type="button"
+          (click)="toggleVacation()"
+          [disabled]="actionLoading"
+        >
+          Vacanza
+        </button>
+        <button
+          mat-flat-button
+          class="action-btn action-btn-secondary text-label"
+          type="button"
+          (click)="markSkip()"
+          [disabled]="actionLoading"
+        >
           Salta
         </button>
         <button
           mat-flat-button
-          class="text-label text-on-accent btn-tonal-cta"
+          class="action-btn action-btn-primary text-label"
           type="button"
           (click)="markDone()"
           [disabled]="actionLoading || !isMyTurn || isOnVacation"
@@ -26,25 +43,16 @@
         </button>
       </div>
 
-      <button mat-flat-button class="text-label text-on-accent btn-tonal" type="button" (click)="toggleVacation()" [disabled]="actionLoading">
-        {{ isOnVacation ? 'Torno disponibile' : 'Vado in vacanza' }}
-      </button>
-
       <mat-progress-bar *ngIf="actionLoading || loading" mode="indeterminate"></mat-progress-bar>
       <p *ngIf="actionLoading" class="hint-text text-caption">Aggiornamento in corso: {{ actionLabel }}...</p>
 
-      <h3 class="text-body-strong">Restante settimana</h3>
-      <mat-list>
-        <mat-list-item *ngFor="let item of weekList">
+      <h3 class="week-title">Restante settimana</h3>
+      <mat-list class="week-list">
+        <mat-list-item class="week-item" *ngFor="let item of weekList">
           <span matListItemTitle class="text-body-strong">{{ item.name }}</span>
           <span matListItemLine class="text-caption">{{ item.dayLabel }}</span>
         </mat-list-item>
       </mat-list>
-
-      <div class="actions-row">
-        <a mat-flat-button class="text-label text-on-accent btn-tonal" routerLink="/history">History</a>
-        <a mat-flat-button class="text-label text-on-accent btn-tonal" routerLink="/stats">Stats</a>
-      </div>
 
       <p *ngIf="message" class="error-text text-feedback-error">{{ message }}</p>
     </mat-card-content>

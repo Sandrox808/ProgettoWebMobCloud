@@ -7,12 +7,27 @@
 
 .panel {
   width: min(420px, 100%);
+  font-family: "Mulish", "Muli", sans-serif;
+  border: none !important;
 }
+
+.panel mat-card-header {
+  padding-top: 40px; /* aumenta questo valore */
+  padding-bottom: 15px;
+    }
+
+.panel mat-card-title {
+  font-family: "Mulish", "Muli", sans-serif;
+  font-weight: 700; /* 400 regular, 600 semibold, 700 bold */
+  font-size: 2rem;
+}
+
+
 
 .content {
   display: grid;
-  gap: 12px;
-  margin-top: 12px;
+  gap: 6px;
+  margin-top: 10px;
 }
 
 .loading-inline {
@@ -25,4 +40,50 @@
   color: var(--app-error);
   font-size: 14px;
   margin: 0;
+}
+
+.auth-btn {
+ min-width: 120px;
+  min-height: 38px;
+  font-family: "Mulish", "Muli", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  --mdc-filled-button-container-color: var(--app-accent-1);
+  --mdc-filled-button-label-text-color: var(--app-on-accent);
+  --mdc-filled-button-label-text-font: "Mulish", "Muli", sans-serif;
+  --mdc-filled-button-label-text-size: 0.9rem;
+  --mdc-filled-button-label-text-weight: 400;
+}
+
+.actions-link {
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: flex-end;
+  padding: 0 16px 16px;
+}
+
+.home-link {
+  font-family: "Mulish", "Muli", sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--app-accent-3);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.panel .mat-mdc-form-field {
+  --mdc-outlined-text-field-focus-outline-color: var(--app-accent-1);
+  --mdc-outlined-text-field-focus-label-text-color: var(--app-accent-1);
+  --mdc-outlined-text-field-caret-color: var(--app-accent-1);
+}
+
+.login-submit-btn {
+  min-width: 136px;
+  min-height: 40px;
+  font-size: 0.95rem;
+}
+
+.login-submit-btn.mat-mdc-unelevated-button {
+  background-color: var(--app-accent-1) !important;
+  color: var(--app-on-accent) !important;
 }

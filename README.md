@@ -129,13 +129,16 @@ ProgettoWeb
 │       ├───proxy.config.json   # Proxy Angular per evitare CORS
 │       └───src
 │           ├───app
-│           │   ├───app.routes.ts          # Routing principale
-│           │   ├───api.service.ts         # Chiamate API centralizzate
-│           │   ├───landing                # Pagina iniziale
-│           │   ├───login                  # Login + token
-│           │   ├───register               # Registrazione
-│           │   └───namePicker             # Turno corrente + azioni Salta/Lavato
-│           └───styles.css                 # Tailwind import
+│           │   ├───app.routes.ts          # Routing principale dell'app
+│           │   ├───api.service.ts         # Servizio HTTP per chiamate API
+│           │   ├───auth.guard.ts          # Protezione rotte riservate
+│           │   ├───landing                # Pagina iniziale (accesso a login/registrazione)
+│           │   ├───login                  # Autenticazione utente
+│           │   ├───register               # Registrazione nuovo utente
+│           │   ├───namePicker             # Gestione turno corrente (Lava/Vacanza/Salta)
+│           │   ├───stats                  # Statistiche mensili (Campione/Atleta)
+│           │   └───history                # Cronologia azioni con filtro per mese
+│           └───styles.css                 # Stili globali dell'app
 └───Insp
     └───LineTrack // Inspirazione o Base di partenza 
 ```

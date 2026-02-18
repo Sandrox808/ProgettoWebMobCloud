@@ -1,7 +1,8 @@
 # Progetto Applicazioni Web Mobile   
 
 ## Overwiew   
-Il progetto nasce come la trasposizione in webapp di un programma per il tracciamento della responsabilità di lavapiatti di un  gruppo di persone.
+Il progetto nasce come la trasposizione in webapp di un programma per il tracciamento della responsabilità di lavapiatti di un gruppo di persone.
+Nella sua evoluzione Cloud-Native, l'applicativo è stato architettato a microservizi (Frontend e Backend) e containerizzato tramite Docker, garantendo scalabilità, portabilità e indipendenza dall'ambiente di esecuzione
 
 ## Funzionalità
 
@@ -33,8 +34,15 @@ La pagina `/namePicker` è il centro operativo dell’app: mostra il giorno corr
 
 ## Architettura   
 ### Frontend  
-Il frontend è sviluppato con Angular e TailwindCSS e comunica con il backend tramite API RESTBacl.  
+Il frontend è sviluppato con Angular e TailwindCSS. 
 La UI è composta da una Landing page con accesso a login/registrazione; dopo il login l’utente entra nella pagina di gestione dei turni (NamePicker).
+
+In ottica Cloud-Native, il deployment avviene tramite una Docker Multi-Stage Build:
+
+- Stage 1: Node.js compila l'applicativo TypeScript in asset statici leggeri e ottimizzati.
+- Stage 2: Gli asset vengono passati ad un server web Nginx.
+
+Nginx come Reverse Proxy: Per risolvere i problemi di CORS e isolamento nel cloud, Nginx è configurato come reverse proxy. Intercetta le chiamate in uscita verso /api/ e le inoltra automaticamente al container del backend sfruttando il DNS interno di Docker.
 
 Dettagli tecnici:
 - Componenti **standalone** con file separati (`.ts`, `.html`, `.css`) per ogni pagina.
@@ -73,9 +81,10 @@ Limitazioni:
 
 ### Database   
 
-La persistenza dei dati è affidata a SQLite, scelto per la sua portabilità (file-based) e affidabilità.
+La persistenza dei dati è affidata a SQLite. Sebbene un'architettura 12-Factor pura richieda un backing service esterno, per mantenere un'infrastruttura single-host a costo zero, è stato adottato il seguente compromesso progettuale:
+Il database non risiede nel container effimero, ma in un Persistent Docker Volume. Questo garantisce l'isolamento dello stato (Stateful) dall'elaborazione (Stateless), rendendo il container Node.js totalmente disposable e resiliente ai riavvii.
 
-Schema Relazionale: Il database è normalizzato in due tabelle principali:
+Schema Relazionale: Il database è normalizzato in tre tabelle principali:
 
 - users: Credenziali, salt e token di sessione.
 
@@ -89,12 +98,33 @@ Integrità: Utilizzo di Foreign Keys per collegare gli utenti alla loro posizion
 
 
 ### Avvio
-[...]
+Il progetto utilizza **Docker Compose** per l'orchestrazione single-host, garantendo l'assoluta parità tra ambiente di sviluppo e di produzione.
+
+# Prerequisiti
+Docker Engine e Docker Compose installati sulla macchina host.
+
+# Setup e Avvio
+1. Clonare la repository
+```
+git clone https://github.com/Sandrox808/ProgettoWebMobCloud
+cd ProgettoWeb
+```
+
+2. (Opzionale) Per maggiore sicurezza modificare la variabile DB_SECRET all'interno del `docker-compose.yml` per maggiore sicurezza
+
+3. Avviare l'infrastruttura in background costruendo le immagini:
+```
+docker-compose up --build -d
+```
+
+4. L'applicazione sarà disponibile all'indirizzo `http://localhost:8080`
+
 
 ### Struttura Cartelle    
 ```
 ProgettoWeb
 ├───Back
+│   ├── Dockerfile     # Immagine Alpine Node.js per il backend
 │   ├───database       # Logica di connessione e file .sqlite
 │   ├───middleware     # Controllori di accesso (Auth Guard)
 │   ├───routes         # Endpoint API (Auth, Queue, History, Stats, User, Participants)
@@ -103,8 +133,10 @@ ProgettoWeb
 │   └───index.js       # Entry point del server
 ├───Front
 │   └───Front-app
-│       ├───proxy.config.json   # Proxy Angular per evitare CORS
+|       ├── Dockerfile     # Multi-stage build (Angular -> Nginx)
+|       ├── nginx.conf     # Configurazione Reverse Proxy e routing SPA
 │       └───src
+│           ├───index.htlm         # Landing Page
 │           ├───app
 │           │   ├───app.routes.ts          # Routing principale dell'app
 │           │   ├───api.service.ts         # Servizio HTTP per chiamate API

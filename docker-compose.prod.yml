@@ -1,0 +1,21 @@
+version: '3.8'
+
+services:
+  backend:
+    image: fabiobroccati/webapp-backend:latest
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - DB_SECRET=${DB_SECRET} 
+    volumes:
+      - ${WEBAPP_STORAGE_HOME}/database:/usr/src/app/database
+    restart: always
+
+  frontend:
+    image: fabiobroccati/webapp-frontend:latest
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: always

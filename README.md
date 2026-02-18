@@ -88,31 +88,8 @@ Sicurezza Query: Interazioni col database gestite esclusivamente tramite Prepare
 Integrità: Utilizzo di Foreign Keys per collegare gli utenti alla loro posizione in coda e allo storico.
 
 
-### Configurazione e Setup Backend
-
-Dopo aver clonato il progetto, rinominare il file '.env.example' in '.env'.
-(Opzionale) Modificare DB_SECRET con una stringa a piacere per maggiore sicurezza.
-
-Per installare le dipendenze eseguire nel terminale (Windows):
-
-    cd Back
-    npm install
-
-Per avviare il backend:
-
-    npm start
-
-### Avvio Frontend (Angular)
-
-Per installare le dipendenze:
-
-    cd Front\Front-app
-    npm install
-
-Per avviare il frontend con proxy (necessario per evitare CORS):
-
-    ng serve --proxy-config proxy.config.json
-
+### Avvio
+[...]
 
 ### Struttura Cartelle    
 ```

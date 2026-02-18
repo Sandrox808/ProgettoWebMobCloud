@@ -97,13 +97,13 @@ Sicurezza Query: Interazioni col database gestite esclusivamente tramite Prepare
 Integrità: Utilizzo di Foreign Keys per collegare gli utenti alla loro posizione in coda e allo storico.
 
 
-### Avvio
+# Avvio
 Il progetto utilizza **Docker Compose** per l'orchestrazione single-host, garantendo l'assoluta parità tra ambiente di sviluppo e di produzione.
 
-# Prerequisiti
+## Prerequisiti
 Docker Engine e Docker Compose installati sulla macchina host.
 
-# Setup e Avvio
+## Setup e Avvio
 1. Clonare la repository
 ```
 git clone https://github.com/Sandrox808/ProgettoWebMobCloud

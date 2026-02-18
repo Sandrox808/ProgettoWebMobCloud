@@ -1,0 +1,73 @@
+name: Progetto Web CI Pipeline
+
+# 1. La pipeline parte ad ogni push sul branch principale
+on:
+  push:
+    branches: [ "main"]
+  pull_request:
+    branches: [ "main"]
+
+# 2. --- Lista dei Job da eseguire ---
+jobs:
+  # JOB 1: Test delle dipendenze nel Backend Node.js
+  build-backend:
+    name: Build & Test Backend
+    runs-on: ubuntu-latest
+    
+    steps:
+    # A. Scarica il codice dalla repo
+    - name: Checkout del codice
+      uses: actions/checkout@v4
+
+    # B. Prepara l'ambiente Node.js
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: './Back/package-lock.json'
+
+    # C. Installa le dipendenze
+    - name: Installa dipendenze Backend
+      working-directory: ./Back
+      run: npm ci
+
+  # JOB 2: Build del Frontend Angular
+  build-frontend:
+    name: Build Frontend Angular
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout del codice
+      uses: actions/checkout@v4
+
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        cache: 'npm'
+        cache-dependency-path: './Front/Front-app/package-lock.json'
+
+    - name: Installa dipendenze Frontend
+      working-directory: ./Front/Front-app
+      run: npm ci
+
+    # A. Compila Angular in modalità produzione per verificare che non ci siano errori TypeScript
+    - name: Compila Angular (Production)
+      working-directory: ./Front/Front-app
+      run: npm run build --configuration=production
+
+  # JOB 3: Test dei Dockerfile
+  docker-check:
+    name: Verifica Build Docker
+    runs-on: ubuntu-latest
+    # Aspetta che Backend e Frontend passino prima di fare questo step
+    needs: [build-backend, build-frontend]
+    
+    steps:
+    - name: Checkout del codice
+      uses: actions/checkout@v4
+
+    # A. Usa Docker Compose per costruire le immagini (senza farle partire)
+    - name: Testa Docker Compose Build
+      run: docker-compose build

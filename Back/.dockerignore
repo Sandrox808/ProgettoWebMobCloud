@@ -2,3 +2,5 @@ node_modules
 npm-debug.log
 .env
 turni.sqlite
+turni.sqlite-wal
+turni.sqlite-shm

@@ -1,6 +1,8 @@
 #File
 .env
 *.sqlite
+*.sqlite-wal
+*.sqlite-shm
 *.db
 .DS_Store
 

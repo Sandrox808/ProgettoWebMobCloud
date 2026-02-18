@@ -21,6 +21,7 @@ async function getDB() {
     });
 
     await db.exec('PRAGMA foreign_keys = ON;');
+    await db.exec('PRAGMA journal_mode = WAL;');
 
     await db.exec(`
         CREATE TABLE IF NOT EXISTS users (

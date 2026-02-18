@@ -70,4 +70,4 @@ jobs:
 
     # A. Usa Docker Compose per costruire le immagini (senza farle partire)
     - name: Testa Docker Compose Build
-      run: docker-compose build
+      run: docker compose build

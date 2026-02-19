@@ -114,7 +114,7 @@ cd ProgettoWeb
 
 3. Avviare l'infrastruttura in background costruendo le immagini:
 ```
-docker-compose up --build -d
+docker compose up --build -d
 ```
 
 4. L'applicazione sarà disponibile all'indirizzo `http://localhost:8080`
@@ -122,12 +122,12 @@ docker-compose up --build -d
 ### Gestione Dati
 Per spegnere i container preservando i dati nel database:
 ```
-docker-compose down
+docker compose down
 ```
 
 Per spegnere i container e cancellare il database (pulire i volumi)
 ```
-docker-compose down -v
+docker compose down -v
 ```
 
 

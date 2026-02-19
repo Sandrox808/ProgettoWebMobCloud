@@ -1,28 +1,42 @@
 version: '3.8'
 
 services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: localpassword
+      MYSQL_DATABASE: turni_db
+    ports:
+      - "3306:3306"
+    volumes:
+      - local_db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-plocalpassword"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    restart: always
+
   backend:
-    build: 
-      context: ./Back
-    container_name: webapp-backend
+    build: ./Back
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=production
-      - DB_SECRET=LaMiaStringaSegretaSuperSicura
-    volumes:
-      - sqlite_data:/usr/src/app/database
-    restart: unless-stopped
+      - NODE_ENV=development
+      - DB_SECRET=SecretDatabase
+      - DATABASE_URL=mysql://root:localpassword@db:3306/turni_db
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
 
   frontend:
-    build: 
-      context: ./Front/Front-app
-    container_name: webapp-frontend
+    build: ./Front/Front-app
     ports:
       - "8080:80"
     depends_on:
       - backend
-    restart: unless-stopped
+    restart: always
 
 volumes:
-  sqlite_data:
+  local_db_data:

@@ -14,12 +14,12 @@ router.post('/user/toggle-vacation', async (req, res) => {
         
         const vacationValue = status ? 1 : 0;
 
-        await db.run('UPDATE users SET is_on_vacation = ? WHERE id = ?', 
+        await db.execute('UPDATE users SET is_on_vacation = ? WHERE id = ?', 
             [vacationValue, req.user.id]);
 
         const msg = status ? "Buone vacanze!" : "Bentornato/a! Si lavora!";
         
-        await db.run(
+        await db.execute(
             'INSERT INTO history (user_id, action_type, note, created_at) VALUES (?, ?, ?, ?)',
             [req.user.id, 'STATUS', msg, Date.now()]
         );

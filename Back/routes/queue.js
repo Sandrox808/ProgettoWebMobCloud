@@ -6,10 +6,10 @@ const requireAuth = require('../middleware/authMiddleware');
 router.use(requireAuth);
 
 async function normalizeQueue(db) {
-    const rows = await db.all('SELECT id FROM queue ORDER BY order_num ASC');
+    const [rows] = await db.execute('SELECT id FROM queue ORDER BY order_num ASC');
     
     for (let i = 0; i < rows.length; i++) {
-        await db.run('UPDATE queue SET order_num = ? WHERE id = ?', [i + 1, rows[i].id]);
+        await db.execute('UPDATE queue SET order_num = ? WHERE id = ?', [i + 1, rows[i].id]);
     }
 }
 
@@ -17,7 +17,7 @@ async function normalizeQueue(db) {
 router.get('/queue', async (req, res) => {
     try {
         const db = await getDB();
-        const queue = await db.all(`
+        const [queue] = await db.execute(`
             SELECT u.username, u.id as user_id, u.is_on_vacation, q.order_num, q.last_skipped 
             FROM queue q 
             JOIN users u ON q.user_id = u.id 
@@ -40,7 +40,7 @@ router.post('/action/done', async (req, res) => {
         const { note } = req.body;
         const db = await getDB();
         
-        const firstActive = await db.get(`
+        const [firstActiveResult] = await db.execute(`
             SELECT q.user_id 
             FROM queue q
             JOIN users u ON q.user_id = u.id
@@ -48,20 +48,22 @@ router.post('/action/done', async (req, res) => {
             ORDER BY q.order_num ASC 
             LIMIT 1
         `);
+        const firstActive = firstActiveResult[0];
 
         if (!firstActive || firstActive.user_id !== req.user.id) {
             return res.status(403).json({ error: "Non tocca a te (o sei in vacanza)!" });
         }
 
-        const last = await db.get('SELECT MAX(order_num) as maxOrder FROM queue');
+        const [lastResult] = await db.execute('SELECT MAX(order_num) as maxOrder FROM queue');
+        const last = lastResult[0];
         const tempHighOrder = (last.maxOrder || 0) + 1000;
         
-        await db.run('UPDATE queue SET order_num = ?, last_skipped = NULL WHERE user_id = ?', 
+        await db.execute('UPDATE queue SET order_num = ?, last_skipped = NULL WHERE user_id = ?', 
             [tempHighOrder, req.user.id]);
         
         await normalizeQueue(db);
 
-        await db.run(
+        await db.execute(
             'INSERT INTO history (user_id, action_type, note, created_at) VALUES (?, ?, ?, ?)',
             [req.user.id, 'DONE', note || null, Date.now()]
         );
@@ -80,7 +82,7 @@ router.post('/action/skip', async (req, res) => {
         const db = await getDB();
         const now = Date.now();
 
-        const fullQueue = await db.all(`
+        const [fullQueue] = await db.execute(`
             SELECT q.id, q.user_id, q.order_num, q.last_skipped, u.is_on_vacation
             FROM queue q
             JOIN users u ON q.user_id = u.id
@@ -116,13 +118,13 @@ router.post('/action/skip', async (req, res) => {
             return res.status(400).json({ error: "Nessuno è presente, la coda è invariata" });
         }
 
-        await db.run('UPDATE queue SET order_num = ? WHERE id = ?', [target.order_num, absentUser.id]);
-        await db.run('UPDATE queue SET order_num = ? WHERE id = ?', [absentUser.order_num, target.id]);
-        await db.run('UPDATE queue SET last_skipped = ? WHERE id = ?', [now, absentUser.id]);
+        await db.execute('UPDATE queue SET order_num = ? WHERE id = ?', [target.order_num, absentUser.id]);
+        await db.execute('UPDATE queue SET order_num = ? WHERE id = ?', [absentUser.order_num, target.id]);
+        await db.execute('UPDATE queue SET last_skipped = ? WHERE id = ?', [now, absentUser.id]);
         
         await normalizeQueue(db);
 
-        await db.run(
+        await db.execute(
             'INSERT INTO history (user_id, action_type, note, created_at) VALUES (?, ?, ?, ?)',
             [absentUser.user_id, 'SKIP', note || "Salto turno", now]
         );

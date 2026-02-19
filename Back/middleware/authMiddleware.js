@@ -9,13 +9,16 @@ const requireAuth = async (req, res, next) => {
         }
 
         const db = await getDB();
-        const user = await db.get('SELECT * FROM users WHERE token = ?', [token]);
+        // MySQL restituisce [rows, fields]
+        const [rows] = await db.execute('SELECT * FROM users WHERE token = ?', [token]);
 
-        if (!user) {
+        // Se l'array è vuoto, il token non esiste
+        if (rows.length === 0) {
             return res.status(403).json({ error: "Token non valido o scaduto." });
         }
 
-        req.user = user;
+        // rows[0] contiene i dati dell'utente
+        req.user = rows[0];
         
         next();
 

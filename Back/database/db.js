@@ -1,63 +1,51 @@
-const sqlite3 = require('sqlite3');
-const { open } = require('sqlite');
-const fs = require('fs');
-const path = require('path');
+const mysql = require('mysql2/promise');
 
-let dbInstance = null;
+let dbPool = null;
 
 async function getDB() {
-    if (dbInstance) return dbInstance;
+    if (dbPool) return dbPool;
 
-    const dbPath = path.join(__dirname, 'turni.sqlite');
-    const dbFolder = path.dirname(dbPath);
-
-    if (!fs.existsSync(dbFolder)) {
-        fs.mkdirSync(dbFolder, { recursive: true });
-    }
-
-    const db = await open({
-        filename: dbPath,
-        driver: sqlite3.Database
+    dbPool = mysql.createPool({
+        uri: process.env.DATABASE_URL, 
+        waitForConnections: true,
+        connectionLimit: 10,
+        queueLimit: 0
     });
 
-    await db.exec('PRAGMA foreign_keys = ON;');
-    await db.exec('PRAGMA journal_mode = WAL;');
-
-    await db.exec(`
+    await dbPool.execute(`
         CREATE TABLE IF NOT EXISTS users (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            username TEXT UNIQUE NOT NULL,
-            password TEXT NOT NULL,
-            salt TEXT NOT NULL,
-            token TEXT,
-            is_on_vacation INTEGER DEFAULT 0
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            username VARCHAR(255) UNIQUE NOT NULL,
+            password VARCHAR(255) NOT NULL,
+            salt VARCHAR(255) NOT NULL,
+            token VARCHAR(255),
+            is_on_vacation TINYINT DEFAULT 0
         );
     `);
 
-    await db.exec(`
+    await dbPool.execute(`
         CREATE TABLE IF NOT EXISTS queue (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            order_num INTEGER,
-            last_skipped INTEGER,
-            FOREIGN KEY(user_id) REFERENCES users(id)
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT,
+            order_num INT,
+            last_skipped BIGINT,
+            FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
         );
     `);
 
-    await db.exec(`
+    await dbPool.execute(`
         CREATE TABLE IF NOT EXISTS history (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER,
-            action_type TEXT,
+            id INT AUTO_INCREMENT PRIMARY KEY,
+            user_id INT,
+            action_type VARCHAR(50),
             note TEXT,
-            created_at INTEGER,
-            FOREIGN KEY(user_id) REFERENCES users(id)
+            created_at BIGINT,
+            FOREIGN KEY(user_id) REFERENCES users(id) ON DELETE CASCADE
         );
     `);
 
-    dbInstance = db;
-    console.log("Database SQLite collegato.");
-    return dbInstance;
+    console.log("Database MySQL (Aiven) collegato con successo!");
+    return dbPool;
 }
 
 module.exports = { getDB };

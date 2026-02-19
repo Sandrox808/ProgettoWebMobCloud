@@ -20,7 +20,7 @@ router.get('/history', async (req, res) => {
         const startOfMonth = new Date(targetYear, targetMonth, 1).getTime();
         const endOfMonth = new Date(targetYear, targetMonth + 1, 0, 23, 59, 59).getTime();
 
-        const history = await db.all(`
+        const [history] = await db.execute(`
             SELECT h.id, u.username, h.action_type, h.note, h.created_at
             FROM history h
             JOIN users u ON h.user_id = u.id

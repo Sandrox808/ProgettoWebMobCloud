@@ -18,7 +18,7 @@ router.get('/stats', async (req, res) => {
         const startOfMonth = new Date(targetYear, targetMonth, 1).getTime();
         const endOfMonth = new Date(targetYear, targetMonth + 1, 0, 23, 59, 59).getTime();
 
-        const champ = await db.get(`
+        const [champRows] = await db.execute(`
             SELECT u.username, COUNT(h.id) as count
             FROM history h
             JOIN users u ON h.user_id = u.id
@@ -28,8 +28,9 @@ router.get('/stats', async (req, res) => {
             ORDER BY count DESC
             LIMIT 1
         `, [startOfMonth, endOfMonth]);
+        const champ = champRows[0];
 
-        const athlete = await db.get(`
+        const [athleteRows] = await db.execute(`
             SELECT u.username, COUNT(h.id) as count
             FROM history h
             JOIN users u ON h.user_id = u.id
@@ -39,18 +40,20 @@ router.get('/stats', async (req, res) => {
             ORDER BY count DESC
             LIMIT 1
         `, [startOfMonth, endOfMonth]);
+        const athlete = athleteRows[0];
 
-
-        const myDonesResult = await db.get(`
+        const [myDonesRows] = await db.execute(`
             SELECT COUNT(id) as count FROM history 
             WHERE user_id = ? AND action_type = 'DONE' AND created_at BETWEEN ? AND ?
         `, [req.user.id, startOfMonth, endOfMonth]);
+        const myDonesResult = myDonesRows[0];
         const myDones = myDonesResult ? myDonesResult.count : 0;
 
-        const totalDonesResult = await db.get(`
+        const [totalDonesRows] = await db.execute(`
             SELECT COUNT(id) as count FROM history 
             WHERE action_type = 'DONE' AND created_at BETWEEN ? AND ?
         `, [startOfMonth, endOfMonth]);
+        const totalDonesResult = totalDonesRows[0];
         const totalDones = totalDonesResult ? totalDonesResult.count : 0;
 
         let percentage = 0;

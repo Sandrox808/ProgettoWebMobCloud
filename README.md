@@ -76,8 +76,8 @@ Limitazioni:
 
 ### Database   
 
-La persistenza dei dati è affidata a SQLite. Sebbene un'architettura 12-Factor pura richieda un backing service esterno, per mantenere un'infrastruttura single-host a costo zero, è stato adottato il seguente compromesso progettuale:
-Il database non risiede nel container effimero, ma in un Persistent Docker Volume. Questo garantisce l'isolamento dello stato dall'elaborazione, rendendo il container Node.js totalmente disposable e resiliente ai riavvii.
+La persistenza dei dati è affidata a **MySQL**. Rispettando i principi della 12-Factor App, il livello dati è stato disaccoppiato dal livello applicativo.
+In produzione, il backend si collega a un'istanza DBaaS esterna gestita (Aiven), rendendo il container Node.js totalmente stateless. In locale, viene istanziato un container MySQL dedicato tramite Docker Compose per garantire un ambiente di sviluppo isolato.
 
 Schema Relazionale: Il database è normalizzato in tre tabelle principali:
 

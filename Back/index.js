@@ -18,7 +18,7 @@ app.use(historyRoutes);
 app.use(statsRoutes);
 app.use(userRoutes);
 
-app.listen(port, async () => {
+app.listen(port, '0.0.0.0', async () => {
     console.log(`Server attivo su http://localhost:${port}`);
     try {
         await getDB();

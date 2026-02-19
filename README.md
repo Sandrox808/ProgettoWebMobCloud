@@ -101,7 +101,7 @@ Integrità: Utilizzo di Foreign Keys per collegare gli utenti alla loro posizion
 Il progetto utilizza **Docker Compose** per l'orchestrazione single-host, garantendo l'assoluta parità tra ambiente di sviluppo e di produzione.
 
 ### Prerequisiti
-Docker Engine e Docker Compose installati sulla macchina host.
+Docker Engine e Docker Compose installati e in esecuzione sulla macchina host.
 
 ### Setup e Avvio
 1. Clonare la repository

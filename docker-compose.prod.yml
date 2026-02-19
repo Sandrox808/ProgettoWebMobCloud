@@ -9,7 +9,7 @@ services:
       - NODE_ENV=production
       - DB_SECRET=${DB_SECRET} 
     volumes:
-      - ${WEBAPP_STORAGE_HOME}/database:/usr/src/app/database
+      - ${WEBAPP_STORAGE_HOME}/usr/src/app/database
     restart: always
 
   frontend:

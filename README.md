@@ -55,46 +55,46 @@ Dettagli tecnici:
 
 Il server è sviluppato in Node.js utilizzando il framework Express, seguendo un'architettura RESTful e modulare. Le principali caratteristiche implementative sono:
 
-Struttura Modulare: Separazione netta tra logica di routing (routes/), middleware di protezione (middleware/) e accesso ai dati, per garantire manutenibilità e scalabilità.
-
-Autenticazione Stateless: Sistema di login basato su Token salvati su DB, eliminando la necessità di sessioni server-side e garantendo compatibilità con client mobile.
-
-Sicurezza: Le password non sono salvate in chiaro ma protette tramite hashing MD5 con Salt univoco per utente e Secret globale, prevenendo attacchi hacker.
-
-Gamification: Calcolo in tempo reale delle statistiche mensili per identificare il "Campione" (più attività) e l'"Atleta" (più salti), incentivando la partecipazione.
-
-Cronologia Operazioni: Sistema di logging immutabile che registra ogni azione (DONE o SKIP) con timestamp e note opzionali, consultabile tramite filtri mensili.
-
-Modalità Vacanza: Sistema di gestione stato utente (`is_on_vacation`). Gli utenti in vacanza mantengono la loro posizione in classifica ma vengono "scavalcati" automaticamente dalla logica dei turni senza perdere la priorità al rientro.
+- **Struttura Modulare**: Separazione netta tra logica di routing (`routes/`), middleware di protezione (`middleware/`) e accesso ai dati, per garantire manutenibilità e scalabilità.
+- **Autenticazione Stateless**: Sistema di login basato su Opaque Token, eliminando la necessità di sessioni server-side e garantendo compatibilità con client mobile.
+- **Sicurezza**: Le password non sono salvate in chiaro ma protette tramite hashing MD5 con Salt univoco per utente e Secret globale, prevenendo attacchi hacker.
+- **Gamification**: Calcolo in tempo reale delle statistiche mensili per identificare il "Campione" (più attività) e l'"Atleta" (più salti), incentivando la partecipazione.
+- **Cronologia Operazioni**: Sistema di logging immutabile che registra ogni azione (DONE o SKIP) con timestamp e note opzionali, consultabile tramite filtri mensili.
+- **Modalità Vacanza**: Sistema di gestione stato utente (`is_on_vacation`). Gli utenti in vacanza mantengono la loro posizione in classifica ma vengono "scavalcati" automaticamente dalla logica dei turni senza perdere la priorità al rientro.
 
 Logica di Coda Avanzata:
 
-- Skip Intelligente: Algoritmo di "salto turno" con cooldown temporale (30 min) per evitare loop infiniti di scambi tra utenti assenti.
+- **Skip Intelligente**: Algoritmo di "salto turno" con cooldown temporale (30 min) per evitare loop infiniti di scambi tra utenti assenti.
 
-- Queue Normalization: Ricalcolo automatico degli indici d'ordine (1, 2, 3...) ad ogni completamento per mantenere la consistenza numerica della lista.
+- **Queue Normalization**: Ricalcolo automatico degli indici d'ordine (1, 2, 3...) ad ogni completamento per mantenere la consistenza numerica della lista.
 
 Limitazioni: 
 
-- Performance: La rinumerazione automatica della coda avviene ad ogni azione, ottimizzata per gruppi medio-piccoli, con l'aumento di utenti le performance rallentano.
+- **Performance**: La rinumerazione automatica della coda avviene ad ogni azione, ottimizzata per gruppi medio-piccoli, con l'aumento di utenti le performance rallentano.
 
-- Blocco Preventivo: Lo skip del turno di TUTTI i partecipanti (assenza totale) non modifica la lista per evitare loop infiniti.
+- **Blocco Preventivo**: Lo skip del turno di TUTTI i partecipanti (assenza totale) non modifica la lista per evitare loop infiniti.
 
 ### Database   
 
 La persistenza dei dati è affidata a SQLite. Sebbene un'architettura 12-Factor pura richieda un backing service esterno, per mantenere un'infrastruttura single-host a costo zero, è stato adottato il seguente compromesso progettuale:
-Il database non risiede nel container effimero, ma in un Persistent Docker Volume. Questo garantisce l'isolamento dello stato (Stateful) dall'elaborazione (Stateless), rendendo il container Node.js totalmente disposable e resiliente ai riavvii.
+Il database non risiede nel container effimero, ma in un Persistent Docker Volume. Questo garantisce l'isolamento dello stato dall'elaborazione, rendendo il container Node.js totalmente disposable e resiliente ai riavvii.
 
 Schema Relazionale: Il database è normalizzato in tre tabelle principali:
 
 - users: Credenziali, salt e token di sessione.
-
 - queue: Stato della coda, ordine di priorità (order_num) e tracciamento dei salti recenti (last_skipped).
-
 - history: Registro storico delle azioni compiute, con riferimenti temporali e note utente.
 
 Sicurezza Query: Interazioni col database gestite esclusivamente tramite Prepared Statements per prevenire SQL Injection.
 
 Integrità: Utilizzo di Foreign Keys per collegare gli utenti alla loro posizione in coda e allo storico.
+
+## CI/CD e Cloud Deployment (Azure)
+Il progetto implementa una pipeline di Continuous Integration e Continuous Delivery automatizzata:
+
+- **GitHub Actions**: Ad ogni push sul branch principale, una pipeline si occupa di eseguire la build delle immagini Docker (Frontend e Backend) e di inviarle al Container Registry pubblico (Docker Hub).
+- **Parità Dev/Prod**: L'orchestrazione è divisa. L'ambiente di sviluppo utilizza `docker-compose.yml` per la compilazione a caldo, mentre la produzione è gestita tramite un file dedicato `docker-compose.prod.yml` che si interfaccia con le immagini precompilate.
+- **Azure App Service**: Il rilascio in produzione avviene in ottica PaaS sull'infrastruttura Microsoft Azure. Il server è configurato in modalità multi-container, sfrutta l'App Service Storage per mappare e preservare i volumi persistenti del database SQLite e inietta i secret a runtime tramite Variabili d'Ambiente, garantendo la separazione tra codice e configurazione.
 
 
 ## Avvio
@@ -110,7 +110,7 @@ git clone https://github.com/Sandrox808/ProgettoWebMobCloud
 cd ProgettoWeb
 ```
 
-2. (Opzionale) Per maggiore sicurezza modificare la variabile DB_SECRET all'interno del `docker-compose.yml` per maggiore sicurezza
+2. (Opzionale) Per maggiore sicurezza modificare la variabile DB_SECRET all'interno del `docker-compose.yml`
 
 3. Avviare l'infrastruttura in background costruendo le immagini:
 ```
@@ -129,7 +129,6 @@ Per spegnere i container e cancellare il database (pulire i volumi)
 ```
 docker-compose down -v
 ```
-
 
 
 ### Struttura Cartelle    

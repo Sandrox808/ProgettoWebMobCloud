@@ -1,6 +1,5 @@
 /* Tema Material globale + Tailwind utilities. */
 @import '@angular/material/prebuilt-themes/indigo-pink.css';
-@import url('https://fonts.googleapis.com/css2?family=Modak&family=Mulish:wght@400;600&display=swap');
 @import "tailwindcss";
 
 :root {

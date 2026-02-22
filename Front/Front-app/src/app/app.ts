@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -16,6 +16,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrl: './app.css'
 })
 export class App {
+  mobileMenuOpen = false;
+
   constructor(private router: Router) {}
 
   get accountName(): string {
@@ -35,6 +37,22 @@ export class App {
   logout() {
     localStorage.removeItem('token');
     localStorage.removeItem('username');
+    this.mobileMenuOpen = false;
     void this.router.navigate(['/login']);
+  }
+
+  toggleMobileMenu() {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu() {
+    this.mobileMenuOpen = false;
+  }
+
+  @HostListener('window:resize')
+  onResize() {
+    if (window.innerWidth > 900) {
+      this.mobileMenuOpen = false;
+    }
   }
 }

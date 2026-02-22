@@ -76,7 +76,7 @@
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: 1fr;
   gap: 12px;
 }
 
@@ -100,8 +100,28 @@
   margin: 0;
 }
 
-@media (max-width: 900px) {
+@media (min-width: 901px) {
   .cards-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .page-center {
+    padding: 12px;
+  }
+
+  .panel mat-card-header {
+    padding-top: 24px;
+    padding-bottom: 10px;
+  }
+
+  .panel mat-card-title {
+    font-size: 1.6rem;
+  }
+
+  .period-toolbar {
+    flex-wrap: wrap;
+    gap: 6px 10px;
   }
 }

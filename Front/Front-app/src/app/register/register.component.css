@@ -28,6 +28,10 @@
   margin-top: 10px;
 }
 
+.content mat-form-field {
+  width: 100%;
+}
+
 .error-text {
   color: var(--app-error);
   font-size: 14px;
@@ -84,4 +88,25 @@
 .register-submit-btn.mat-mdc-unelevated-button {
   background-color: var(--app-accent-1) !important;
   color: var(--app-on-accent) !important;
+}
+
+@media (max-width: 520px) {
+  .page-center {
+    padding: 12px;
+  }
+
+  .panel mat-card-title {
+    font-size: 1.6rem;
+  }
+
+  .auth-btn,
+  .register-submit-btn {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .actions-link {
+    justify-content: center;
+    padding: 4px 12px 14px;
+  }
 }

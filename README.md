@@ -94,7 +94,7 @@ Il progetto implementa una pipeline di Continuous Integration e Continuous Deliv
 
 - **GitHub Actions**: Ad ogni push sul branch principale, una pipeline si occupa di eseguire la build delle immagini Docker (Frontend e Backend) e di inviarle al Container Registry pubblico (Docker Hub).
 - **Parità Dev/Prod**: L'orchestrazione è divisa. L'ambiente di sviluppo utilizza `docker-compose.yml` per la compilazione a caldo, mentre la produzione è gestita tramite un file dedicato `docker-compose.prod.yml` che si interfaccia con le immagini precompilate.
-- **Azure App Service**: Il rilascio in produzione avviene in ottica PaaS sull'infrastruttura Microsoft Azure. Il server è configurato in modalità multi-container, sfrutta l'App Service Storage per mappare e preservare i volumi persistenti del database SQLite e inietta i secret a runtime tramite Variabili d'Ambiente, garantendo la separazione tra codice e configurazione.
+- **Azure App Service**: Il rilascio in produzione avviene in ottica PaaS sull'infrastruttura Microsoft Azure.
 
 
 ## Avvio

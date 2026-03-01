@@ -82,6 +82,7 @@
 
 .cards-grid .mat-mdc-card {
   border: none !important;
+  box-shadow: none !important;
 }
 
 .value-text {

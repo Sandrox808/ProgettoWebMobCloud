@@ -13,6 +13,7 @@
   --app-cta: var(--app-accent-1);
   --app-surface: color-mix(in srgb, var(--app-bg) 92%, white);
   --app-surface-2: color-mix(in srgb, var(--app-bg) 84%, white);
+  --app-card-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
   --app-surface-primary: var(--app-surface);
   --app-muted: color-mix(in srgb, var(--app-text) 58%, var(--app-bg));
   --app-error: var(--app-accent-3);
@@ -53,7 +54,14 @@ html {
   color: var(--app-text);
   border-radius: 20px !important;
   border: 1px solid color-mix(in srgb, var(--app-accent-1) 35%, transparent) !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+  box-shadow: var(--app-card-shadow) !important;
+}
+
+@media (max-width: 900px) {
+  .mat-mdc-card,
+  .mat-mdc-card.mat-mdc-card-outlined {
+    box-shadow: var(--app-card-shadow) !important;
+  }
 }
 
 .mat-toolbar.mat-primary {

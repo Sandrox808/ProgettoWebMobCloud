@@ -62,12 +62,14 @@
   color: var(--app-on-accent) !important;
 }
 
-@media (max-width: 520px) {
   .landing-title {
     white-space: normal;
-    font-size: clamp(2.2rem, 12vw, 4rem);
+    font-size: clamp(3.2rem, 16vw, 6rem);
+    color: var(--app-accent-2);
   }
 
+@media (max-width: 520px) {
+  
   .landing-subtitle {
     font-size: 1rem;
     margin-top: 12px;

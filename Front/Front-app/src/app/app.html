@@ -42,8 +42,9 @@
         <span class="account-name text-label">{{ accountName }}</span>
       </div>
       <nav class="mobile-sheet-nav">
-        <a mat-button class="mobile-sheet-link text-label" routerLink="/history" routerLinkActive="active-link" (click)="closeMobileMenu()">History</a>
-        <a mat-button class="mobile-sheet-link text-label" routerLink="/stats" routerLinkActive="active-link" (click)="closeMobileMenu()">Stats</a>
+        <a mat-button class="mobile-sheet-link text-label" routerLink="/namePicker" routerLinkActive="mobile-active-link" (click)="closeMobileMenu()">NamePicker</a>
+        <a mat-button class="mobile-sheet-link text-label" routerLink="/history" routerLinkActive="mobile-active-link" (click)="closeMobileMenu()">History</a>
+        <a mat-button class="mobile-sheet-link text-label" routerLink="/stats" routerLinkActive="mobile-active-link" (click)="closeMobileMenu()">Stats</a>
         <button mat-flat-button class="mobile-sheet-logout text-label" type="button" (click)="logout()">Logout</button>
       </nav>
     </section>

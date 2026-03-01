@@ -3,20 +3,20 @@
 @import "tailwindcss";
 
 :root {
-  --app-bg: #F2EFC7;
+  --app-bg: #ECF3FE;
   --app-bg1: #0A0903;
-  --app-text: #000000;
+  --app-text: black;
   --app-text2: #FFFFFF;
-  --app-accent-1: #4AA15E;
-  --app-accent-2: #DE0000;
-  --app-accent-3: #BD666D;
+  --app-accent-1: #0E7C7B;
+  --app-accent-2: #111D4A;
+  --app-accent-3: #C1292E;
   --app-cta: var(--app-accent-1);
   --app-surface: color-mix(in srgb, var(--app-bg) 92%, white);
   --app-surface-2: color-mix(in srgb, var(--app-bg) 84%, white);
   --app-surface-primary: var(--app-surface);
   --app-muted: color-mix(in srgb, var(--app-text) 58%, var(--app-bg));
-  --app-error: var(--app-accent-1);
-  --app-success: var(--app-accent-2);
+  --app-error: var(--app-accent-3);
+  --app-success: var(--app-accent-1);
   --app-on-accent: var(--app-bg);
 }
 

@@ -18,8 +18,8 @@
   flex-direction: column;
   gap: 5px;
   padding: 20px 5px 5px;
-  background: var(--app-bg1);
-  color: var(--app-text2);
+  background: var(--app-text2);
+  color: var(--app-text);
   border: none;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
@@ -28,8 +28,8 @@
 .brand-link {
   justify-content: flex-start;
   font-weight: 700;
-  color: var(--app-text2) !important;
-  --mdc-text-button-label-text-color: var(--app-text2);
+  color: var(--app-text) !important;
+  --mdc-text-button-label-text-color: var(--app-text);
 }
 
 .sidebar-nav {
@@ -39,8 +39,8 @@
 
 .nav-link {
   justify-content: flex-start;
-  color: var(--app-text2) !important;
-  --mdc-text-button-label-text-color: var(--app-text2);
+  color: var(--app-text) !important;
+  --mdc-text-button-label-text-color: var(--app-text);
 }
 
 .logout-btn {
@@ -50,8 +50,8 @@
 
 .active-link {
   font-weight: 700;
-  color: var(--app-accent-2) !important;
-  --mdc-text-button-label-text-color: var(--app-accent-2);
+  color: var(--app-accent-1) !important;
+  --mdc-text-button-label-text-color: var(--app-accent-1);
   text-decoration: underline;
   text-underline-offset: 4px;
 }
@@ -74,7 +74,7 @@
   font-size: var(--wtm-size, clamp(2rem, 4vw, 3.4rem));
   line-height: 1;
   letter-spacing: 0.01em;
-  color: var(--app-text);
+  color: var(--app-accent-1);
 }
 
 .account-side {
@@ -106,8 +106,8 @@
 .mobile-menu-btn {
   display: none;
   border: 0;
-  background: var(--app-bg1);
-  color: var(--app-text2);
+  background: var(--app-text2);
+  color: var(--app-text);
   width: 42px;
   height: 42px;
   border-radius: 10px;
@@ -188,8 +188,8 @@
     bottom: 0;
     z-index: 100;
     display: block;
-    background: var(--app-bg1);
-    color: var(--app-text2);
+    background: var(--app-text2);
+    color: var(--app-text);
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     box-shadow: 0 -14px 30px rgba(0, 0, 0, 0.34);
@@ -204,12 +204,12 @@
 
   .mobile-sheet-header {
     padding: 0 4px 8px;
-    border-bottom: 1px solid color-mix(in srgb, var(--app-text2) 25%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--app-text) 18%, transparent);
     margin-bottom: 10px;
   }
 
   .mobile-sheet-header .account-name {
-    color: var(--app-text2);
+    color: var(--app-text);
   }
 
   .mobile-sheet-nav {
@@ -219,8 +219,16 @@
 
   .mobile-sheet-link {
     justify-content: flex-start;
-    color: var(--app-text2) !important;
-    --mdc-text-button-label-text-color: var(--app-text2);
+    color: var(--app-text) !important;
+    --mdc-text-button-label-text-color: var(--app-text);
+  }
+
+  .mobile-active-link {
+    font-weight: 700;
+    color: var(--app-accent-1) !important;
+    --mdc-text-button-label-text-color: var(--app-accent-1);
+    text-decoration: underline;
+    text-underline-offset: 4px;
   }
 
   .mobile-sheet-logout {

@@ -11,7 +11,7 @@ export const routes: Routes = [
   { path: '', component: LandingComponent },
   { path: 'login', component: LoginComponent },
   { path: 'register', component: RegisterComponent },
-  { path: 'namePicker', component: NamePickerComponent, canActivate: [authGuard] },
+  { path: 'namePicker', component: NamePickerComponent, canActivate: [authGuard]},
   { path: 'history', component: HistoryComponent, canActivate: [authGuard] },
   { path: 'stats', component: StatsComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
